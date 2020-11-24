@@ -39,8 +39,6 @@ public class MainForm {
                 Main.callForms(e, "log");
                 break;
         }
-//        String t =
-//        System.out.println(t);
 
     }
 

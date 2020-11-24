@@ -52,9 +52,11 @@ public class LoginController {
 
         if(check){
 
+            Main.log("Username: " + username + " Logged in");
             Main.callForms(e, "MainForm");
         }
         else {
+            Main.log("Username: " + username + " Tried log in");
             errorLbl.setText(error);
         }
 
@@ -111,6 +113,7 @@ public class LoginController {
             labels += "English";
 
         }
+
         if(location.startsWith("fr")){
             labels += "Française";
             french();
@@ -134,7 +137,6 @@ public class LoginController {
 
         }
         errorLbl.setText(labels);
-
     }
 
     @FXML

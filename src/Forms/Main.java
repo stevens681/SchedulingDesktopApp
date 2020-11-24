@@ -12,7 +12,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Main extends Application {
 
@@ -50,6 +54,31 @@ public class Main extends Application {
         form.setScene(new Scene(addPartForm, w, h));
         form.show();
     }
+
+    public static void log(String logData){
+        try {
+            SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+            Date date = new Date(System.currentTimeMillis());
+
+            File logTxt = new File("login_activity.txt");
+            if(!logTxt.exists()){
+                logTxt.createNewFile();
+            }
+
+            logData = formatter.format(date) + " " + logData + "\n";
+
+            FileWriter logWrite = new FileWriter("login_activity.txt", true);
+            logWrite.write(logData);
+            logWrite.close();
+
+
+        } catch (IOException e) {
+            System.out.println("System error: " + e.toString());
+
+        }
+
+    }
+
 
 
     public static void main(String[] args) {

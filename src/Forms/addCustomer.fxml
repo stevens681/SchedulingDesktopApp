@@ -48,8 +48,8 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <Button layoutX="150.0" layoutY="432.0" mnemonicParsing="false" text="Add Customer" />
-            <Button layoutX="257.0" layoutY="432.0" mnemonicParsing="false" text="Cancel" />
+            <Button layoutX="150.0" layoutY="432.0" mnemonicParsing="false" onAction="#saveCustomer" text="Add Customer" />
+            <Button fx:id="cancelBtn" layoutX="257.0" layoutY="432.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
          </children></Pane>
    </children>
 </AnchorPane>
