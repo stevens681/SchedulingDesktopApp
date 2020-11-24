@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Forms.MainForm">
+   <children>
+      <Pane prefHeight="300.0" prefWidth="300.0">
+         <children>
+             <Label fx:id="tittleLbl" layoutX="100.0" layoutY="30.0" text="Options">
+                 <font>
+                     <Font name="Roboto Thin" size="30.0" />
+                 </font></Label>
+            <Button fx:id="cusReBtn" layoutX="93.0" layoutY="179.0" mnemonicParsing="false" onAction="#button" text="Customer Records" />
+            <Button fx:id="addNewAp" layoutX="79.0" layoutY="138.0" mnemonicParsing="false" onAction="#button" text="Add New Appointment " />
+            <Button fx:id="logBtn" layoutX="124.0" layoutY="220.0" mnemonicParsing="false" onAction="#button" text="Log" />
+            <Button fx:id="addCustBtn" layoutX="85.0" layoutY="100.0" mnemonicParsing="false" onAction="#button" text="Add a New Customer" />
+            <Label fx:id="user" layoutX="14.0" layoutY="269.0" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
