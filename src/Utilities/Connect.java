@@ -37,13 +37,14 @@ public class Connect {
 
         Locale locale = Locale.getDefault();
         switch (locale.toString()){
-            case "US":
+            case "en_US":
                 location = "United States";
                 break;
-            case "CA":
+            case "en_CA":
+            case "fr_CA":
                 location = "Canada";
                 break;
-            case "UK":
+            case "en_UK":
                 location = "United Kingdom";
                 break;
             default:
@@ -52,43 +53,5 @@ public class Connect {
         }
         return location;
     }
-
-//    public static void check(){
-//        String t = "test", kl = "";
-//        try{
-//            Statement d = sendData().createStatement();
-//            String q = "SELECT User_Name, Password FROM users";
-//            ResultSet r = d.executeQuery(q);
-//
-//
-//
-//            while (r.next())
-//              //System.out.println("This is pass "+r.getString("User_Name"));
-//                //kl = r.getString("User_ID");
-////                t = r.getString("User_ID");
-//                //System.out.println(kl);
-//            if( r.getString("User_Name") != null && r.getString("User_Name").toLowerCase().equals(t)){
-//                System.out.println("This is the ID " +r.getString("User_ID"));
-//                System.out.println("This is the Pass " +r.getString("Password"));
-//                System.out.println("This is the User name " +r.getString("User_Name"));
-//            }
-////            if(kl.toLowerCase().equals(t)){
-////                System.out.println("This is the ID " +r.getString("User_ID"));
-////            }
-//
-//            d.close();
-//            }
-//
-//
-//        catch (SQLException e){
-//        System.out.println(e);
-//
-//    }
-//
-//    }
-//    public static void createUser(){
-//        check();
-//
-//    }
 
 }

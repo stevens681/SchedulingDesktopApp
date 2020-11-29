@@ -84,10 +84,10 @@ public class Main extends Application {
     public static void main(String[] args) {
 
 
-        Customer cu = new Customer(1, "jo", "12 dsdf", "02286", "monte", "323");
-        Customer ci = new Customer(2, "johhgdhgfhgd kjjkhdjs", "13 dsdf", "02286", "monte dsfdf", "323 24323");
-        DataBase.addCustomer(cu);
-        DataBase.addCustomer(ci);
+//        Customer cu = new Customer(1, "jo", "12 dsdf", "02286", "monte", "323");
+//        Customer ci = new Customer(2, "johhgdhgfhgd kjjkhdjs", "13 dsdf", "02286", "monte dsfdf", "323 24323");
+//        DataBase.addCustomer(cu);
+//        DataBase.addCustomer(ci);
 
 
         

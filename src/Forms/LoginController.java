@@ -117,7 +117,6 @@ public class LoginController {
         if(location.startsWith("fr")){
             labels += "Française";
             french();
-
         }
 
         switch (location){
