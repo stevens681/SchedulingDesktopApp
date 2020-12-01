@@ -6,7 +6,6 @@ import java.util.Locale;
 
 public class Connect {
 
-    private static String location;
     private static final String SERVER_NAME = "wgudb.ucertify.com", PORT = "3306",
             DB_NAME = "WJ07O6R", USERNAME = "U07O6R", PASSWORD = "53689082284",
             URL = "jdbc:mysql://"+SERVER_NAME+":"+PORT+"/"+DB_NAME;
@@ -36,20 +35,12 @@ public class Connect {
     public static String getCountry(){
 
         Locale locale = Locale.getDefault();
-        switch (locale.toString()){
-            case "en_US":
-                location = "United States";
-                break;
-            case "en_CA":
-            case "fr_CA":
-                location = "Canada";
-                break;
-            case "en_UK":
-                location = "United Kingdom";
-                break;
-            default:
-                location = "";
-                break;
+        String location;
+        switch (locale.toString()) {
+            case "en_US" -> location = "United States";
+            case "en_CA", "fr_CA" -> location = "Canada";
+            case "en_UK" -> location = "United Kingdom";
+            default -> location = "";
         }
         return location;
     }

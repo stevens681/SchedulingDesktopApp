@@ -1,27 +1,32 @@
 package Utilities;
 
 
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
 
 public class DataBase {
 
-    private static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
-    private static ObservableList<String> allCountries = FXCollections.observableArrayList();
-    private static ObservableList<String> canada = FXCollections.observableArrayList();
-    private static ObservableList<String> uk = FXCollections.observableArrayList();
-    private static ObservableList<String> usa = FXCollections.observableArrayList();
+    private static final ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
+    private static final ObservableList<String> allCountries = FXCollections.observableArrayList();
+    private static final ObservableList<String> canada = FXCollections.observableArrayList();
+    private static final ObservableList<String> uk = FXCollections.observableArrayList();
+    private static final ObservableList<String> usa = FXCollections.observableArrayList();
     private static String user;
 
 
     public static boolean login(String username, String pass){
+
         boolean ok = false;
 
         try {
@@ -62,13 +67,8 @@ public class DataBase {
             while(results.next()) {
 
                 String country = results.getString("Country");
-                switch(results.getInt("Country_ID")){
-                    case 38:
-                    case 231:
-                    case 230:
-
-                        allCountries.add(country);
-                        break;
+                switch (results.getInt("Country_ID")) {
+                    case 38, 231, 230 -> allCountries.add(country);
                 }
 
             }
@@ -83,6 +83,7 @@ public class DataBase {
     }
 
     public static void fillStates(){
+
         try {
             Statement data = Connect.sendData().createStatement();
             String query = "SELECT * FROM first_level_divisions";
@@ -90,16 +91,10 @@ public class DataBase {
             while(results.next()) {
 
                 String state = results.getString("Division");
-                switch(results.getInt("COUNTRY_ID")){
-                    case 38:
-                        canada.add(state);
-                        break;
-                    case 230:
-                        uk.add(state);
-                        break;
-                    case 231:
-                        usa.add(state);
-                        break;
+                switch (results.getInt("COUNTRY_ID")) {
+                    case 38 -> canada.add(state);
+                    case 230 -> uk.add(state);
+                    case 231 -> usa.add(state);
                 }
 
             }
@@ -112,8 +107,88 @@ public class DataBase {
 
     }
 
+    public static int getStateID(String state){
 
-    public void pullCustomers(){
+        int id = 0;
+
+        try {
+
+            Statement data = Connect.sendData().createStatement();
+            String query = "SELECT * FROM first_level_divisions";
+            ResultSet results = data.executeQuery(query);
+            while(results.next()) {
+
+                int search = results.getInt("Division_ID");
+
+                if(results.getString("Division").equals(state))
+                    id = search;
+            }
+            data.close();
+
+        } catch (SQLException e) {
+            showMessageDialog(null,"SQLException: " + e.getMessage());
+
+        }
+
+        return id;
+
+    }
+    public static String getStateName(String state){
+
+
+
+        try {
+
+            Statement data = Connect.sendData().createStatement();
+            String query = "SELECT * FROM first_level_divisions";
+            ResultSet results = data.executeQuery(query);
+            while(results.next()) {
+
+                String search = results.getString("Division");
+
+                if(results.getString("Division_ID").equals(state))
+                    state = search;
+            }
+            data.close();
+
+        } catch (SQLException e) {
+            showMessageDialog(null,"SQLException: " + e.getMessage());
+
+        }
+
+        return state;
+
+    }
+
+    public static int getCountryID(String state){
+
+        int id = 0;
+
+        try {
+
+            Statement data = Connect.sendData().createStatement();
+            String query = "SELECT * FROM first_level_divisions";
+            ResultSet results = data.executeQuery(query);
+            while(results.next()) {
+
+                int search = results.getInt("COUNTRY_ID");
+
+                if(results.getString("Division_ID").equals(state))
+                    id = search;
+            }
+            data.close();
+
+        } catch (SQLException e) {
+            showMessageDialog(null,"SQLException: " + e.getMessage());
+
+        }
+
+        return id;
+
+    }
+
+
+    public static void pullCustomers(){
         try {
             Statement data = Connect.sendData().createStatement();
             String query = "SELECT * FROM customers";
@@ -136,15 +211,81 @@ public class DataBase {
 
     }
 
-    public static void addCustomer(Customer newCustomer){
+    public static void testSql(){
+        try {
+            System.out.println("Test");
+            Statement data = Connect.sendData().createStatement();
+            String query = "SELECT * FROM customers";
+            ResultSet results = data.executeQuery(query);
+            while(results.next()) {
+                String t = results.getString("Address");
+                System.out.println(t+"Inside the loop");
+//                if(!results.next()){
+                    System.out.println("Creator: "+
+                            results.getString("Created_By")+
+                            "Name: "+ results.getString("Customer_Name")+
+                            "Division ID: "+results.getString("Division_ID")+
+                            "Date: "+results.getString("Create_Date"));
+//                }
+
+           }
+            data.close();
+
+        } catch (SQLException e) {
+            showMessageDialog(null,"SQLException: " + e.getMessage());
+
+        }
+
+    }
+
+    public static void addCustomer(Customer newCustomer, String country){
+
+        String name = newCustomer.getName(), address = newCustomer.getAddress(),
+                phone = newCustomer.getPhone(), zip = newCustomer.getZipCode(),
+                state = newCustomer.getCity();
+        int id=newCustomer.getId();
+
+        String user = DataBase.getUser();
 
         boolean exist = true;
+
         for(Customer c : allCustomers){
             if(newCustomer.getName().toLowerCase().equals(c.getName().toLowerCase())){
                 exist =false;
+
             }
         }
+
         if(exist){
+
+            try{
+                Statement data = Connect.sendData().createStatement();
+                SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = new Date(System.currentTimeMillis());
+                String time = formatter.format(date);
+
+                String query = "INSERT INTO customers (Customer_ID, Address, Create_Date, " +
+                        "Created_By, Customer_Name, Division_ID, " +
+                        "Phone, Postal_Code)";
+
+                String values = " VALUES ('"+id+"', '"+
+                        address+"', '"+
+                        time+"', '"+
+                        user+"', '"+
+                        name+"', '"+
+                        getStateID(state)+"', '"+
+                        phone+"', '"+
+                        zip+"')";
+
+                PreparedStatement statement = Connect.sendData().prepareStatement(query+values);
+                statement.executeUpdate();
+
+                data.close();
+
+            }catch (SQLException e){
+                showMessageDialog(null,"Adding the customer SQLException: " + e.getMessage());
+            }
+
             allCustomers.add(newCustomer);
 
         }

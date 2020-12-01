@@ -1,7 +1,6 @@
 package Forms;
 
-import Utilities.*;
-
+import Utilities.DataBase;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,9 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Locale;
-
 
 
 /**
@@ -38,7 +35,6 @@ public class LoginController {
     private Label errorLbl;
     @FXML
     private Hyperlink lengLbl;
-    private String location;
     boolean lan;
     String error = "Please check your username and password";
 
@@ -52,6 +48,7 @@ public class LoginController {
 
         if(check){
 
+            DataBase.pullCustomers();
             Main.log("Username: " + username + " Logged in");
             Main.callForms(e, "MainForm");
         }
@@ -106,7 +103,7 @@ public class LoginController {
 
         Locale user = Locale.getDefault();
 
-        location = user.toString();
+        String location = user.toString();
         String labels = "";
 
         if(location.startsWith("en")) {
@@ -119,27 +116,28 @@ public class LoginController {
             french();
         }
 
-        switch (location){
-            case "en_US":
+        switch (location) {
+            case "en_US" -> {
                 labels += " United States";
                 lan = true;
-                break;
-            case "en_CA":
-            case "fr_CA":
+            }
+            case "en_CA", "fr_CA" -> {
                 labels += " Canada";
                 lan = false;
-                break;
-            case "en_UK":
+            }
+            case "en_UK" -> {
                 labels += " United Kingdom";
                 lan = true;
-                break;
-
+            }
         }
         errorLbl.setText(labels);
     }
 
     @FXML
-    public void initialize() throws SQLException {
+    public void initialize() {
+        DataBase.testSql();
+
+        //DataBase.pullCustomers();
 
         location();
 

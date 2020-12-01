@@ -4,19 +4,20 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Forms.MainForm">
+<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Forms.MainForm">
    <children>
-      <Pane prefHeight="300.0" prefWidth="300.0">
+      <Pane prefHeight="600.0" prefWidth="600.0">
          <children>
-             <Label fx:id="tittleLbl" layoutX="100.0" layoutY="30.0" text="Options">
+             <TableView fx:id="custTable" layoutX="50.0" layoutY="86.0" prefHeight="400.0" prefWidth="500.0" />
+            <Button fx:id="cusReBtn" layoutX="350.0" layoutY="508.0" mnemonicParsing="false" onAction="#button" text="Customer Records" />
+            <Button fx:id="addNewAp" layoutX="193.0" layoutY="508.0" mnemonicParsing="false" onAction="#button" text="Modify Customer" />
+            <Button fx:id="logBtn" layoutX="520.0" layoutY="508.0" mnemonicParsing="false" onAction="#button" text="Log" />
+            <Button fx:id="addCustBtn" layoutX="50.0" layoutY="508.0" mnemonicParsing="false" onAction="#button" text="Add a New Customer" />
+             <Label fx:id="tittleLbl" layoutX="250.0" layoutY="24.0" text="Options">
                  <font>
                      <Font name="Roboto Thin" size="30.0" />
                  </font></Label>
-            <Button fx:id="cusReBtn" layoutX="93.0" layoutY="179.0" mnemonicParsing="false" onAction="#button" text="Customer Records" />
-            <Button fx:id="addNewAp" layoutX="79.0" layoutY="138.0" mnemonicParsing="false" onAction="#button" text="Add New Appointment " />
-            <Button fx:id="logBtn" layoutX="124.0" layoutY="220.0" mnemonicParsing="false" onAction="#button" text="Log" />
-            <Button fx:id="addCustBtn" layoutX="85.0" layoutY="100.0" mnemonicParsing="false" onAction="#button" text="Add a New Customer" />
-            <Label fx:id="user" layoutX="14.0" layoutY="269.0" />
+            <Label fx:id="user" layoutX="26.0" layoutY="558.0" prefHeight="17.0" prefWidth="0.0" />
          </children>
       </Pane>
    </children>

@@ -1,8 +1,6 @@
 package Forms;
 
 import Utilities.Connect;
-import Utilities.Customer;
-import Utilities.DataBase;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -34,19 +32,15 @@ public class Main extends Application {
         int w = 0, h = 0;
 
 
-        switch (loadForm){
-            case "Records":
+        switch (loadForm) {
+            case "Records", "MainForm" -> {
                 w = 600;
                 h = 600;
-                break;
-            case "addCustomer":
-                    w = 400;
-                    h = 600;
-                    break;
-            case "MainForm":
-                w = 300;
-                h = 300;
-                break;
+            }
+            case "addCustomer", "ModifyCustomer" -> {
+                w = 400;
+                h = 600;
+            }
         }
 
         Parent addPartForm = FXMLLoader.load(Main.class.getResource(loadForm+".fxml"));
@@ -57,15 +51,14 @@ public class Main extends Application {
 
     public static void log(String logData){
         try {
-            SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-            Date date = new Date(System.currentTimeMillis());
+
 
             File logTxt = new File("login_activity.txt");
             if(!logTxt.exists()){
                 logTxt.createNewFile();
             }
 
-            logData = formatter.format(date) + " " + logData + "\n";
+            logData = time() + " " + logData + "\n";
 
             FileWriter logWrite = new FileWriter("login_activity.txt", true);
             logWrite.write(logData);
@@ -77,6 +70,17 @@ public class Main extends Application {
 
         }
 
+    }
+    public static String time(){
+
+        String time = "";
+
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+        Date date = new Date(System.currentTimeMillis());
+        time = formatter.format(date);
+
+
+        return time;
     }
 
 

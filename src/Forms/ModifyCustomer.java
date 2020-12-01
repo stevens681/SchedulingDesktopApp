@@ -1,22 +1,19 @@
 package Forms;
 
-import Utilities.Connect;
 import Utilities.Customer;
 import Utilities.DataBase;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-
-import javafx.event.ActionEvent;
-
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class AddCustomer {
+public class ModifyCustomer {
 
     @FXML
     private Button cancelBtn;
@@ -35,42 +32,45 @@ public class AddCustomer {
     @FXML
     private Label lbl;
 
-    int id = DataBase.getAllCustomers().size()+1;
 
-    public void setStateCombo(){
+    public void selectedCustomer(Customer customer) {
+
+        int countryId = DataBase.getCountryID(customer.getCity());
+        String country = "";
+        switch (countryId) {
+            case 38 -> country = "Canada";
+            case 230 -> country = "United Kingdom";
+            case 231 -> country = "United States";
+        }
+        custNameTxt.setText(customer.getName());
+        custAddressTxt.setText(customer.getAddress());
+        custPhoneTxt.setText(customer.getPhone());
+        custZipTxt.setText(customer.getZipCode());
+        countryCombo.getSelectionModel().select(country);
+        stateCombo.getSelectionModel().select(DataBase.getStateName(customer.getCity()));
+    }
+
+    public void setStateCombo(ActionEvent e) {
 
         String country = countryCombo.getValue().toString();
         stateCombo.getItems().clear();
 
-        switch (country) {
-            case "Canada" -> stateCombo.getItems().addAll(DataBase.getCanada());
-            case "United Kingdom" -> stateCombo.getItems().addAll(DataBase.getUk());
-            case "United States" -> stateCombo.getItems().addAll(DataBase.getUsa());
+        switch (country){
+            case "Canada":
+                stateCombo.getItems().addAll(DataBase.getCanada());
+                break;
+            case "United Kingdom":
+                stateCombo.getItems().addAll(DataBase.getUk());
+                break;
+            case "United States":
+                stateCombo.getItems().addAll(DataBase.getUsa());
+                break;
         }
 
         stateCombo.getSelectionModel().select(0);
     }
 
-    public void saveCustomer(ActionEvent e)throws IOException{
-
-        if(check()){
-            String name = custNameTxt.getText(), address = custAddressTxt.getText(),
-                    phone = custPhoneTxt.getText(), zip = custZipTxt.getText(),
-                    country = countryCombo.getValue().toString(),
-                    state = stateCombo.getValue().toString();
-
-            Customer customer = new Customer(id, name, address, zip, state, phone);
-            DataBase.addCustomer(customer, country);
-
-            lbl.setText(DataBase.getUser().toUpperCase()+" Customer added");
-            Main.callForms(e, "MainForm");
-        }
-
-    }
-
-    public void cancel(ActionEvent e)throws IOException{
-
-        Main.callForms(e, "MainForm");
+    public void saveCustomer(ActionEvent e) {
     }
 
     private boolean check(){
@@ -110,17 +110,7 @@ public class AddCustomer {
 
     }
 
-
-
-    public void initialize(){
-        lbl.setText(DataBase.getUser().toUpperCase());
-        DataBase.pullCountries();
-
-        countryCombo.getItems().addAll(DataBase.getAllCountries());
-
-        System.out.println("Country "+Connect.getCountry());
-        countryCombo.getSelectionModel().select(Connect.getCountry());
-        setStateCombo();
-
+    public void cancel(ActionEvent e)throws IOException {
+        Main.callForms(e, "MainForm");
     }
 }
