@@ -23,15 +23,20 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes>
-      <connection connection-id="a6d0dd1c-869f-46ee-aee0-13ae725cf878">
-        <schema name="WJ07O6R" object-types="column, dataset trigger, table, function, procedure, index, constraint, view" />
-      </connection>
-    </loaded-nodes>
+    <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="a6d0dd1c-869f-46ee-aee0-13ae725cf878">
-      <console name="DatabaseView" type="STANDARD" schema="WJ07O6R" session="Main" />
+      <console name="DatabaseView" type="STANDARD" schema="WJ07O6R" session="Main"><![CDATA[select
+    c.`Country`,
+    c.`Country_ID`,
+    c.`Create_Date`,
+    c.`Created_By`,
+    c.`Last_Update`,
+    c.`Last_Updated_By`
+from
+    countries c;
+PRINT 'Just selected * from sysobjects']]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
@@ -39,6 +44,11 @@
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="a6d0dd1c-869f-46ee-aee0-13ae725cf878" />
+  </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="a6d0dd1c-869f-46ee-aee0-13ae725cf878" dataset="WJ07O6R.appointments" active-filter-id="" />
+    <filter-actions connection-id="a6d0dd1c-869f-46ee-aee0-13ae725cf878" dataset="WJ07O6R.first_level_divisions" active-filter-id="" />
+    <filter-actions connection-id="a6d0dd1c-869f-46ee-aee0-13ae725cf878" dataset="WJ07O6R.countries" active-filter-id="" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />

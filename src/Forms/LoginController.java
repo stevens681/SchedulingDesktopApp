@@ -43,14 +43,14 @@ public class LoginController {
     @FXML
     public void login(ActionEvent e)throws IOException {
 
-        String username = userField.getText(), password = passField.getText();
+        String username = userField.getText().toLowerCase(), password = passField.getText();
         boolean check = DataBase.login(username, password);
 
         if(check){
 
             DataBase.pullCustomers();
             Main.log("Username: " + username + " Logged in");
-            Main.callForms(e, "MainForm");
+            Main.callForms(e, "AppointmentForm");
         }
         else {
             Main.log("Username: " + username + " Tried log in");

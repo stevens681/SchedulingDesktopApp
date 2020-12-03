@@ -34,6 +34,8 @@ public class AddCustomer {
     private ComboBox stateCombo;
     @FXML
     private Label lbl;
+    @FXML
+    private Label custID;
 
     int id = DataBase.getAllCustomers().size()+1;
 
@@ -111,7 +113,6 @@ public class AddCustomer {
     }
 
 
-
     public void initialize(){
         lbl.setText(DataBase.getUser().toUpperCase());
         DataBase.pullCountries();
@@ -121,6 +122,7 @@ public class AddCustomer {
         System.out.println("Country "+Connect.getCountry());
         countryCombo.getSelectionModel().select(Connect.getCountry());
         setStateCombo();
+        custID.setText("Customer ID:\n"+id);
 
     }
 }

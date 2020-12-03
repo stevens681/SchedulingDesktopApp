@@ -107,20 +107,20 @@ public class DataBase {
 
     }
 
-    public static int getStateID(String state){
+    public static int getSearchID(String nameToId, String table, String columnFrom, String columnResult){
 
         int id = 0;
 
         try {
 
             Statement data = Connect.sendData().createStatement();
-            String query = "SELECT * FROM first_level_divisions";
+            String query = "SELECT * FROM "+table;
             ResultSet results = data.executeQuery(query);
             while(results.next()) {
 
-                int search = results.getInt("Division_ID");
+                int search = results.getInt(columnResult);
 
-                if(results.getString("Division").equals(state))
+                if(results.getString(columnFrom).equals(nameToId))
                     id = search;
             }
             data.close();
@@ -133,21 +133,22 @@ public class DataBase {
         return id;
 
     }
-    public static String getStateName(String state){
+
+    public static String getSearchName(String idToName, String table, String columnFrom, String columnResult){
 
 
 
         try {
 
             Statement data = Connect.sendData().createStatement();
-            String query = "SELECT * FROM first_level_divisions";
+            String query = "SELECT * FROM "+table;
             ResultSet results = data.executeQuery(query);
             while(results.next()) {
 
-                String search = results.getString("Division");
+                String search = results.getString(columnResult);
 
-                if(results.getString("Division_ID").equals(state))
-                    state = search;
+                if(results.getString(columnFrom).equals(idToName))
+                    idToName = search;
             }
             data.close();
 
@@ -156,24 +157,24 @@ public class DataBase {
 
         }
 
-        return state;
+        return idToName;
 
     }
 
-    public static int getCountryID(String state){
+    public static int idToId(String idToId, String table, String columnFrom, String columnResult){
 
         int id = 0;
 
         try {
 
             Statement data = Connect.sendData().createStatement();
-            String query = "SELECT * FROM first_level_divisions";
+            String query = "SELECT * FROM "+table;
             ResultSet results = data.executeQuery(query);
             while(results.next()) {
 
-                int search = results.getInt("COUNTRY_ID");
+                int search = results.getInt(columnResult);
 
-                if(results.getString("Division_ID").equals(state))
+                if(results.getString(columnFrom).equals(idToId))
                     id = search;
             }
             data.close();
@@ -212,20 +213,22 @@ public class DataBase {
     }
 
     public static void testSql(){
+        String table = "first_level_divisions", columnFrom= "Division", columnResult ="Division_ID";
+
         try {
             System.out.println("Test");
             Statement data = Connect.sendData().createStatement();
-            String query = "SELECT * FROM customers";
+            String query = "SELECT * FROM appointments";
             ResultSet results = data.executeQuery(query);
             while(results.next()) {
-                String t = results.getString("Address");
+                String t = results.getString("Location");
                 System.out.println(t+"Inside the loop");
 //                if(!results.next()){
-                    System.out.println("Creator: "+
-                            results.getString("Created_By")+
-                            "Name: "+ results.getString("Customer_Name")+
-                            "Division ID: "+results.getString("Division_ID")+
-                            "Date: "+results.getString("Create_Date"));
+//                    System.out.println("Creator: "+
+//                            results.getString("Created_By")+
+//                            "Name: "+ results.getString("Customer_Name")+
+//                            "Division ID: "+results.getString("Division_ID")+
+//                            "Date: "+results.getString("Create_Date"));
 //                }
 
            }
@@ -235,6 +238,10 @@ public class DataBase {
             showMessageDialog(null,"SQLException: " + e.getMessage());
 
         }
+        int i=getSearchID("Alabama", table, columnFrom, columnResult);
+        String g = Integer.toString(i);
+
+        System.out.println("City: "+g );
 
     }
 
@@ -273,7 +280,7 @@ public class DataBase {
                         time+"', '"+
                         user+"', '"+
                         name+"', '"+
-                        getStateID(state)+"', '"+
+                        getSearchID(state, "first_level_divisions", "Division", "Division_ID")+"', '"+
                         phone+"', '"+
                         zip+"')";
 

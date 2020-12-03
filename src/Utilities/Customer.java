@@ -1,7 +1,12 @@
 package Utilities;
 
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 public class Customer {
 
+    private ObservableList<Appointment> appointment = FXCollections.observableArrayList();
     private int id;
     private String name;
     private String address;
@@ -22,7 +27,16 @@ public class Customer {
 
     }
 
-    public Customer(){}
+    public Customer(ObservableList appointment, int id, String name, String address, String zipCode, String city, String phone){
+
+        this.appointment = appointment;
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.zipCode = zipCode;
+        this.city = city;
+        this.phone = phone;
+    }
 
     public int getId(){return id;}
 
@@ -47,4 +61,18 @@ public class Customer {
     public void setCity(String city){this.city = city;}
 
     public void setPhone(String phone){this.phone = phone;}
+
+    public void addAppointment(Appointment newAppointment){appointment.add(newAppointment);}
+
+    public boolean deleteAppointment(Appointment deleteAppointment){
+
+        for(Appointment a: appointment){
+            if(a.getAptId() == deleteAppointment.getAptId()){
+                appointment.remove(a);
+                return true;
+            }
+        }
+        return false;
+    }
+    public ObservableList<Appointment> getAllAppointments(){ return appointment;}
 }

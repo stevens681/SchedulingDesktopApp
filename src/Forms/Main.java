@@ -41,6 +41,10 @@ public class Main extends Application {
                 w = 400;
                 h = 600;
             }
+            case "AppointmentForm" -> {
+                w = 600;
+                h = 400;
+            }
         }
 
         Parent addPartForm = FXMLLoader.load(Main.class.getResource(loadForm+".fxml"));
@@ -49,6 +53,10 @@ public class Main extends Application {
         form.show();
     }
 
+    /**
+     * This log every user that logs in, to an external .txt file
+     * @param logData The string to be log
+     * */
     public static void log(String logData){
         try {
 
@@ -71,6 +79,10 @@ public class Main extends Application {
         }
 
     }
+
+    /**
+     * This get the system time
+     * */
     public static String time(){
 
         String time = "";

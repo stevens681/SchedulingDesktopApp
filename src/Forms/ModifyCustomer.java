@@ -31,23 +31,27 @@ public class ModifyCustomer {
     private ComboBox stateCombo;
     @FXML
     private Label lbl;
+    @FXML
+    private Label custID;
 
 
     public void selectedCustomer(Customer customer) {
-
-        int countryId = DataBase.getCountryID(customer.getCity());
+        String table = "first_level_divisions", columnFrom= "Division_ID", columnResult ="Division";
+        int countryId = DataBase.idToId(customer.getCity(), "first_level_divisions", "Division_ID","COUNTRY_ID");
         String country = "";
+
         switch (countryId) {
             case 38 -> country = "Canada";
             case 230 -> country = "United Kingdom";
             case 231 -> country = "United States";
         }
+        custID.setText("Customer ID:\n"+ customer.getId());
         custNameTxt.setText(customer.getName());
         custAddressTxt.setText(customer.getAddress());
         custPhoneTxt.setText(customer.getPhone());
         custZipTxt.setText(customer.getZipCode());
         countryCombo.getSelectionModel().select(country);
-        stateCombo.getSelectionModel().select(DataBase.getStateName(customer.getCity()));
+        stateCombo.getSelectionModel().select(DataBase.getSearchName(customer.getCity(), table, columnFrom, columnResult));
     }
 
     public void setStateCombo(ActionEvent e) {
