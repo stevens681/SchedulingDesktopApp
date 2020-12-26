@@ -19,6 +19,7 @@ public class DataBase {
 
     private static final ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
     private static final ObservableList<String> allCountries = FXCollections.observableArrayList();
+    private static final ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
     private static final ObservableList<String> canada = FXCollections.observableArrayList();
     private static final ObservableList<String> uk = FXCollections.observableArrayList();
     private static final ObservableList<String> usa = FXCollections.observableArrayList();
@@ -300,9 +301,14 @@ public class DataBase {
             showMessageDialog(null, "This customer already exists!");
     }
 
+    public static void addAppointment(Appointment newAppointment){
+        allAppointments.add(newAppointment);
+    }
+
 
     public static ObservableList<Customer>getAllCustomers(){return allCustomers;}
     public static ObservableList<String>getAllCountries(){return allCountries;}
+    public static ObservableList<Appointment>getAllAppointments(){return allAppointments;}
     public static ObservableList<String>getCanada(){return canada;}
     public static ObservableList<String>getUk(){return uk;}
     public static ObservableList<String>getUsa(){return usa;}

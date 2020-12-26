@@ -11,39 +11,57 @@
           <font>
           <Font name="Roboto Thin" size="30.0" />
           </font></Label>
-          <Label fx:id="userLbl" layoutX="36.0" layoutY="106.0" text="Tittle">
+          <Label layoutX="36.0" layoutY="106.0" text="Tittle">
           <font>
               <Font size="15.0" />
           </font>
           </Label>
-         <TextField layoutX="86.0" layoutY="104.0" />
+         <TextField fx:id="tittle" layoutX="86.0" layoutY="104.0" />
+         <Label layoutX="358.0" layoutY="106.0" text="Type">
+            <font>
+               <Font size="15.0" />
+            </font>
+         </Label>
+         <ComboBox fx:id="typeOfApp" layoutX="410.0" layoutY="104.0" prefWidth="150.0" />
          <Label fx:id="userLbl1" layoutX="36.0" layoutY="151.0" text="Description">
             <font>
                <Font size="15.0" />
             </font>
          </Label>
-         <TextField layoutX="36.0" layoutY="181.0" prefHeight="51.0" prefWidth="159.0" />
-         <Label fx:id="userLbl11" layoutX="226.0" layoutY="151.0" text="Location">
+         <TextField fx:id="descriptionTxt" layoutX="36.0" layoutY="181.0" prefHeight="51.0" prefWidth="159.0" />
+         <Label layoutX="226.0" layoutY="151.0" text="Location">
             <font>
                <Font size="15.0" />
             </font>
          </Label>
-         <TextField layoutX="226.0" layoutY="181.0" />
+         <TextField fx:id="locationTxt" layoutX="226.0" layoutY="181.0" />
          <Label fx:id="userLbl111" layoutX="36.0" layoutY="248.0" text="Contact Name">
             <font>
                <Font size="15.0" />
             </font>
          </Label>
-         <TextField layoutX="36.0" layoutY="276.0" />
+         <ComboBox fx:id="contactName" layoutX="36.0" layoutY="276.0" prefHeight="25.0" prefWidth="159.0" />
          <Label fx:id="userLbl1111" layoutX="226.0" layoutY="248.0" text="Email">
             <font>
                <Font size="15.0" />
             </font>
          </Label>
-         <TextField layoutX="226.0" layoutY="276.0" />
-         <DatePicker fx:id="startDate" layoutX="410.0" layoutY="181.0" />
-         <DatePicker layoutX="323.0" layoutY="81.0" />
-         <Spinner layoutX="422.0" layoutY="276.0" />
+         <TextField fx:id="email" layoutX="226.0" layoutY="276.0" />
+         <Label fx:id="userLbl21" layoutX="410.0" layoutY="151.0" text="Date">
+            <font>
+               <Font size="15.0" />
+            </font>
+         </Label>
+         <DatePicker fx:id="startDate" layoutX="410.0" layoutY="181.0" onAction="#getTime" />
+         <Label fx:id="userLbl211" layoutX="417.0" layoutY="248.0" text="Time">
+            <font>
+               <Font size="15.0" />
+            </font>
+         </Label>
+         <ComboBox fx:id="time" layoutX="410.0" layoutY="276.0" prefWidth="150.0" />
+         <Button layoutX="388.0" layoutY="331.0" mnemonicParsing="false" onAction="#save" text="Save" />
+         <Button layoutX="449.0" layoutY="331.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+         <Label fx:id="lbl" layoutX="22.0" layoutY="335.0" />
       </Pane>
    </children>
 </AnchorPane>

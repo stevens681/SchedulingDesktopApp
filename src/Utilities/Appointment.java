@@ -28,6 +28,16 @@ public class Appointment {
         this.location = location;
     }
 
+    public Appointment(int aptId, String description, String start, String end, String tittle, String type, String location){
+        this.aptId = aptId;
+        this.description = description;
+        this.start = start;
+        this.end = end;
+        this.tittle = tittle;
+        this.type = type;
+        this.location = location;
+    }
+
     public Appointment(){}
 
     public int getAptId() {
