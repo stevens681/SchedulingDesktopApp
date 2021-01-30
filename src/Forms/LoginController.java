@@ -7,13 +7,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
 import java.io.IOException;
 import java.util.Locale;
 
 
 /**
  * @author Fernando Rosa
+ * This form allows the user to login into the appoitment application.
  * */
 public class LoginController {
 
@@ -38,8 +38,11 @@ public class LoginController {
     boolean lan;
     String error = "Please check your username and password";
 
-
-
+    /**
+     * The login checks for the username and password to be correct.
+     * @param e Action evernt
+     * @throws IOException Failed to login
+     * */
     @FXML
     public void login(ActionEvent e)throws IOException {
 
@@ -50,7 +53,7 @@ public class LoginController {
 
             DataBase.pullCustomers();
             Main.log("Username: " + username + " Logged in");
-            Main.callForms(e, "AppointmentForm");
+            Main.callForms(e, "MainForm");
         }
         else {
             Main.log("Username: " + username + " Tried log in");
@@ -59,6 +62,9 @@ public class LoginController {
 
     }
 
+    /**
+     * Sets the language to french.
+     * */
     public void french(){
         tittleLbl.setText("Application de planification");
         tittleLbl.setTranslateX(-25.0);
@@ -74,6 +80,9 @@ public class LoginController {
         error = "Veuillez vérifier votre nom d'utilisateur et votre mot de passe";
     }
 
+    /**
+     * Sets the language to english.
+     * */
     public void english(){
         tittleLbl.setText("Scheduling Application");
         tittleLbl.setTranslateX(0);
@@ -90,6 +99,9 @@ public class LoginController {
 
     }
 
+    /**
+     * Selects the language.
+     * */
     public void otherLeng(){
         if(lan){
             french();
@@ -99,6 +111,9 @@ public class LoginController {
     }
 
 
+    /**
+     * Gets the location and the computer language.
+     * */
     public void location(){
 
         Locale user = Locale.getDefault();
@@ -133,11 +148,11 @@ public class LoginController {
         errorLbl.setText(labels);
     }
 
+    /**
+     * Initializes the form.
+     * */
     @FXML
     public void initialize() {
-        DataBase.testSql();
-
-        //DataBase.pullCustomers();
 
         location();
 

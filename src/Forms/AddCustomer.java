@@ -106,7 +106,6 @@ public class AddCustomer {
         }
         lbl.setText(DataBase.getUser().toUpperCase()+" Please check\n"+msg);
 
-        System.out.println(msg);
 
         return checked;
 

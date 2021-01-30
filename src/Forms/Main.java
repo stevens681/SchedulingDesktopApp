@@ -1,6 +1,8 @@
 package Forms;
 
+import Utilities.Appointment;
 import Utilities.Connect;
+import Utilities.DataBase;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -47,9 +49,9 @@ public class Main extends Application {
             }
         }
 
-        Parent addPartForm = FXMLLoader.load(Main.class.getResource(loadForm+".fxml"));
+        Parent parentForm = FXMLLoader.load(Main.class.getResource(loadForm+".fxml"));
         Stage form = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        form.setScene(new Scene(addPartForm, w, h));
+        form.setScene(new Scene(parentForm, w, h));
         form.show();
     }
 
@@ -87,7 +89,7 @@ public class Main extends Application {
 
         String time = "";
 
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
         Date date = new Date(System.currentTimeMillis());
         time = formatter.format(date);
 
@@ -105,6 +107,19 @@ public class Main extends Application {
 //        DataBase.addCustomer(cu);
 //        DataBase.addCustomer(ci);
 
+//        Appointment a = new Appointment(1, "1 qw", "2020-12-15 04:00", "2020-12-07", "1", "in", "12 dfsdf");
+//        Appointment b = new Appointment(2, "1 qw", "2020-12-15 05:00", "2020-12-08", "1", "in", "12 dfsdf");
+//        Appointment c = new Appointment(3, "1 qw", "2020-12-14", "2020-12-09", "1", "in", "12 dfsdf");
+//        Appointment d = new Appointment(4, "1 qw", "2020-12-14", "2020-12-10", "1", "in", "12 dfsdf");
+//        Appointment e = new Appointment(5, "1 qw", "2020-12-16", "2020-12-11", "1", "in", "12 dfsdf");
+//        Appointment f = new Appointment(6, "1 qw", "2020-12-02", "2020-12-12", "1", "in", "12 dfsdf");
+//
+//        DataBase.addAppointment(a);
+//        DataBase.addAppointment(b);
+//        DataBase.addAppointment(c);
+//        DataBase.addAppointment(d);
+//        DataBase.addAppointment(e);
+//        DataBase.addAppointment(f);
 
         
         Connect.connecting();
