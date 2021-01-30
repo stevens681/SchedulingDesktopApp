@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Forms.RecordsController">
+   <children>
+      <Pane prefHeight="600.0" prefWidth="600.0">
+         <children>
+             <Label layoutX="228.0" layoutY="25.0" text="Customers">
+                 <font>
+                     <Font name="Roboto Thin" size="30.0" />
+                 </font></Label>
+            <TableView fx:id="custTable" layoutX="50.0" layoutY="100.0" prefHeight="400.0" prefWidth="500.0" />
+            <Button layoutX="50.0" layoutY="522.0" mnemonicParsing="false" text="Add Appointment" />
+            <Button layoutX="425.0" layoutY="522.0" mnemonicParsing="false" text="Delete Appointment" />
+            <Button layoutX="237.0" layoutY="522.0" mnemonicParsing="false" text="Modify Appointment" />
+         </children></Pane>
+   </children>
+</AnchorPane>
