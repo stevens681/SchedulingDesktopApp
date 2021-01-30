@@ -8,6 +8,7 @@
   <component name="DBNavigator.Project.DataExportManager">
     <export-instructions>
       <create-header value="true" />
+      <friendly-headers value="false" />
       <quote-values-containing-separator value="true" />
       <quote-all-values value="false" />
       <value-separator value="" />
@@ -23,11 +24,15 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes />
+    <loaded-nodes>
+      <connection connection-id="a6d0dd1c-869f-46ee-aee0-13ae725cf878">
+        <schema name="information_schema" object-types="view, table" />
+      </connection>
+    </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="a6d0dd1c-869f-46ee-aee0-13ae725cf878">
-      <console name="DatabaseView" type="STANDARD" schema="WJ07O6R" session="Main"><![CDATA[select
+      <console name="DatabaseView" type="STANDARD" schema="WJ07O6R" session="Main">select
     c.`Country`,
     c.`Country_ID`,
     c.`Create_Date`,
@@ -36,7 +41,7 @@
     c.`Last_Updated_By`
 from
     countries c;
-PRINT 'Just selected * from sysobjects']]></console>
+PRINT 'Just selected * from sysobjects'</console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
@@ -122,6 +127,7 @@ PRINT 'Just selected * from sysobjects']]></console>
           <restore-workspace value="true" />
           <restore-workspace-deep value="true" />
           <environment-type value="default" />
+          <connectivity-timeout value="5" />
           <idle-time-to-disconnect value="30" />
           <idle-time-to-disconnect-pool value="5" />
           <credential-expiry-time value="10" />
