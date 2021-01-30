@@ -49,9 +49,9 @@ public class Main extends Application {
             }
         }
 
-        Parent addPartForm = FXMLLoader.load(Main.class.getResource(loadForm+".fxml"));
+        Parent parentForm = FXMLLoader.load(Main.class.getResource(loadForm+".fxml"));
         Stage form = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        form.setScene(new Scene(addPartForm, w, h));
+        form.setScene(new Scene(parentForm, w, h));
         form.show();
     }
 

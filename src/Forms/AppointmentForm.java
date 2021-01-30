@@ -109,12 +109,9 @@ public class AppointmentForm {
             Main.callForms(e, "MainForm");
 
 
-
-
         }
 
     }
-
 
     /**
      * This will add a new element to the array
@@ -134,7 +131,7 @@ public class AppointmentForm {
         return newArr;
     }
 
-    //Work in progress
+    // in progress
     public void getTime(){
 
         time.getItems().clear();
