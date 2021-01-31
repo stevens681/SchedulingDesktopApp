@@ -56,7 +56,6 @@ public class DataBase {
         }
 
         return ok;
-
     }
 
     public static void pullCountries(){
@@ -136,8 +135,6 @@ public class DataBase {
     }
 
     public static String getSearchName(String idToName, String table, String columnFrom, String columnResult){
-
-
 
         try {
 

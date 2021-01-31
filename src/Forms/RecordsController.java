@@ -3,19 +3,34 @@ package Forms;
 import Utilities.Customer;
 import Utilities.DataBase;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+
+import java.io.IOException;
 
 public class RecordsController {
 
     @FXML
     private TableView custTable;
 
+    @FXML
+    public void button(ActionEvent e)throws IOException {
+
+        switch (((Button) e.getSource()).getText()) {
+            case "Add Appointment" -> Main.callForms(e, "AppointmentForm");
+            //case "Modify Customer" -> modCustomer(e);
+            case "Back" -> Main.callForms(e, "MainForm");
+            //case "Log" -> Main.callForms(e, "log");
+        }
+
+    }
     public void colCreator(String tbls) {
 
-        String[] lblCustomer = {"ID", "Customer Name"};
+        String[] lblCustomer = {"ID", "Appointments"};
         String[] areas = {"id", "name"};
         int colWidth;
 

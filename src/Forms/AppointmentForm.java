@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static javax.swing.JOptionPane.showMessageDialog;
+
 
 public class AppointmentForm {
 
@@ -48,7 +50,7 @@ public class AppointmentForm {
 
     public void cancel(ActionEvent e)throws IOException {
 
-        Main.callForms(e, "MainForm");
+        Main.callForms(e, "Records");
     }
 
 
@@ -57,7 +59,6 @@ public class AppointmentForm {
         for(Customer c: DataBase.getAllCustomers()){
             contactName.getItems().addAll(c.getName());
         }
-
     }
 
     public void fillType(){
@@ -69,6 +70,7 @@ public class AppointmentForm {
 
     }
 
+    //This need the right timezone
     public void save(ActionEvent e)throws IOException {
         int customerID = 0;
 
@@ -92,6 +94,9 @@ public class AppointmentForm {
             newAppt = new Appointment(newContact, appId, description, date+" "+hour, date, appTittle,type, location);
 
             DataBase.addAppointment(newAppt);
+
+            showMessageDialog(null, "Customer: " + name
+                                +"\nDate: " + date);
 
             System.out.println("Appointment ID: " + appId);
             System.out.println("Contact ID: " + newContact.size()+1);
@@ -269,6 +274,9 @@ public class AppointmentForm {
         return checked;
     }
 
+    /**
+     * Initializes the form.
+     * */
     @FXML
     public void initialize() {
 

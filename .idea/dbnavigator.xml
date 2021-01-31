@@ -26,13 +26,13 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="a6d0dd1c-869f-46ee-aee0-13ae725cf878">
-        <schema name="information_schema" object-types="view, table" />
+        <schema name="information_schema" object-types="table, view" />
       </connection>
     </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="a6d0dd1c-869f-46ee-aee0-13ae725cf878">
-      <console name="DatabaseView" type="STANDARD" schema="WJ07O6R" session="Main">select
+      <console name="DatabaseView" type="STANDARD" schema="WJ07O6R" session="Main"><![CDATA[select
     c.`Country`,
     c.`Country_ID`,
     c.`Create_Date`,
@@ -41,7 +41,7 @@
     c.`Last_Updated_By`
 from
     countries c;
-PRINT 'Just selected * from sysobjects'</console>
+PRINT 'Just selected * from sysobjects']]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">

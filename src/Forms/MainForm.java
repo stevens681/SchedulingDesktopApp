@@ -36,7 +36,6 @@ public class MainForm {
     @FXML
     public void button(ActionEvent e)throws IOException {
 
-
         switch (((Button) e.getSource()).getText()) {
             case "Add a New Customer" -> Main.callForms(e, "addCustomer");
             case "Modify Customer" -> modCustomer(e);
@@ -69,6 +68,8 @@ public class MainForm {
         }
 
     }
+
+
     @FXML
     public void modCustomer(ActionEvent e) throws IOException {
         Customer customer =  custTable.getSelectionModel().getSelectedItem();
@@ -91,9 +92,11 @@ public class MainForm {
         }
     }
 
+    /**
+     * Initializes the form.
+     * */
     @FXML
     public void initialize(){
-
 
         user.setText(DataBase.getUser().toUpperCase() + " "+ Connect.getCountry());
         colCreator("customer");
