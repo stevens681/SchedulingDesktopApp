@@ -9,12 +9,15 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -31,7 +34,7 @@ public class AppointmentForm {
     @FXML
     private ComboBox typeOfApp;
     @FXML
-    private ComboBox contactName;
+    private TextField contactName;
     @FXML
     private TextField tittle;
     @FXML
@@ -48,18 +51,21 @@ public class AppointmentForm {
 
     int appId = DataBase.getAllAppointments().size()+1;
 
+    public void customer( Customer customer){
+        contactName.setText(customer.getName());
+    }
     public void cancel(ActionEvent e)throws IOException {
 
         Main.callForms(e, "Records");
     }
 
 
-    public void fillContact(){
-
-        for(Customer c: DataBase.getAllCustomers()){
-            contactName.getItems().addAll(c.getName());
-        }
-    }
+//    public void fillContact(){
+//
+//        for(Customer c: DataBase.getAllCustomers()){
+//            contactName.getItems().addAll(c.getName());
+//        }
+//    }
 
     public void fillType(){
 
@@ -77,7 +83,7 @@ public class AppointmentForm {
         Contact contact;
         Appointment newAppt;
         for(Customer c: DataBase.getAllCustomers()){
-            if(c.getName() == contactName.getValue()){
+            if(c.getName() == contactName.getText()){
                 customerID = c.getId();
             }
         }
@@ -86,7 +92,7 @@ public class AppointmentForm {
 
             String appTittle = tittle.getText(), date = startDate.getValue().toString(), description = descriptionTxt.getText(),
                 location = locationTxt.getText(), mail = email.getText(), hour = time.getValue().toString(),
-                    type = typeOfApp.getValue().toString(), name = contactName.getValue().toString();
+                    type = typeOfApp.getValue().toString(), name = contactName.getText();
             contact = new Contact(newContact.size()+1, name, mail);
 
             newContact.add(contact);
@@ -136,16 +142,16 @@ public class AppointmentForm {
         return newArr;
     }
 
-    // in progress
+    //Work in progress
     public void getTime(){
 
         time.getItems().clear();
         ArrayList<String> timeToSet = new ArrayList<String>();
-        timeToSet.add("01:00 PM");
-        timeToSet.add("02:00 PM");
-        timeToSet.add("03:00 PM");
-        timeToSet.add("04:00 PM");
-        timeToSet.add("05:00 PM");
+        timeToSet.add(localTimeZone("08:00:00"));
+        timeToSet.add(localTimeZone("09:00:00"));
+        timeToSet.add(localTimeZone("10:00:00"));
+        timeToSet.add(localTimeZone("11:00:00"));
+        timeToSet.add(localTimeZone("12:00:00"));
 
         for(Appointment appointment: DataBase.getAllAppointments()){
 
@@ -158,6 +164,29 @@ public class AppointmentForm {
         }
         
         time.getItems().addAll(timeToSet);
+    }
+
+    public static String localTimeZone(String time){
+
+        time = "0000-00-00 " + time + " UTC";
+        time = Main.convertZone(time);
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+        DateFormat outFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa z");
+        Date date = null;
+        try {
+            date= format.parse(time);
+            time = outFormat.format(date);
+
+        }
+        catch (ParseException e){
+            e.printStackTrace();
+        }
+        String[] splitTime = time.split(" ", -1);
+
+        time = splitTime[1] + " " + splitTime[2] + " " + splitTime[3] ;
+
+        return time;
+
     }
 
     private void daysAvailable(){
@@ -189,7 +218,9 @@ public class AppointmentForm {
         }
 
             String[] finalData = data;
+
             startDate.setDayCellFactory(days -> new DateCell() {
+
             @FXML
             public void updateItem(LocalDate date, boolean empty) {
 
@@ -282,6 +313,5 @@ public class AppointmentForm {
 
         daysAvailable();
         fillType();
-        fillContact();
     }
 }

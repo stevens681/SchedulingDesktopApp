@@ -5,12 +5,19 @@ import Utilities.DataBase;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.io.IOException;
+
+import static javax.swing.JOptionPane.showMessageDialog;
 
 public class RecordsController {
 
@@ -21,13 +28,36 @@ public class RecordsController {
     public void button(ActionEvent e)throws IOException {
 
         switch (((Button) e.getSource()).getText()) {
-            case "Add Appointment" -> Main.callForms(e, "AppointmentForm");
+            case "Add Appointment" -> apptButton(e);
             //case "Modify Customer" -> modCustomer(e);
             case "Back" -> Main.callForms(e, "MainForm");
             //case "Log" -> Main.callForms(e, "log");
         }
 
     }
+
+    @FXML
+    public void apptButton(ActionEvent e) throws IOException {
+        Customer customer = (Customer) custTable.getSelectionModel().getSelectedItem();
+        Parent parent;
+        Stage stage;
+
+        if (customer == null)
+            showMessageDialog(null, "Please select a customer");
+        else {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentForm.fxml"));
+            loader.load();
+            AppointmentForm selected = loader.getController();
+            selected.customer((Customer) custTable.getSelectionModel().getSelectedItem());
+            parent = loader.getRoot();
+            stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(parent));
+            stage.show();
+
+        }
+    }
+
     public void colCreator(String tbls) {
 
         String[] lblCustomer = {"ID", "Appointments"};

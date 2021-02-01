@@ -1,8 +1,6 @@
 package Forms;
 
-import Utilities.Appointment;
 import Utilities.Connect;
-import Utilities.DataBase;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -10,13 +8,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class Main extends Application {
 
@@ -90,13 +89,33 @@ public class Main extends Application {
         String time = "";
 
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date date = new Date(System.currentTimeMillis());
         time = formatter.format(date);
-
 
         return time;
     }
 
+    public static String timeZone(){
+        String zone ="";
+        TimeZone timeZone = TimeZone.getDefault();
+        zone = timeZone.getDisplayName(false, 0);
+
+        return zone;
+    }
+
+    public static String convertZone( String time){
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+        Date localZone = null;
+        try {
+            localZone = format.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        format.setTimeZone(TimeZone.getTimeZone(timeZone()));
+        String zone = format.format(localZone);
+        return zone;
+    }
 
 
     public static void main(String[] args) {
@@ -121,7 +140,14 @@ public class Main extends Application {
 //        DataBase.addAppointment(e);
 //        DataBase.addAppointment(f);
 
-        
+        System.out.println("The whole time -->"+time());
+        System.out.println("TimeZone -->"+timeZone());
+        System.out.println("Converted zone -->"+convertZone(time()));
+        String[] segments = time().split(" ", -1);
+        System.out.println("Converted zone -->"+convertZone("0000-00-00 20:00:00 PST"));
+        System.out.println("segment  -->" + segments[1]);
+
+        //System.out.println("\n\nThis is split "+ localTimeZone("08:00:00"));
         Connect.connecting();
         //Connect.createUser();
         launch(args);
