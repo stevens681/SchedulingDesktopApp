@@ -27,8 +27,10 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 
 public class AppointmentForm {
-
+    Appointment appointment;
     private final ObservableList<Contact> newContact = FXCollections.observableArrayList();
+    private ObservableList<Appointment> addNewAppointment = FXCollections.observableArrayList();
+    private Appointment newAppt;
     @FXML
     private DatePicker startDate;
     @FXML
@@ -50,9 +52,19 @@ public class AppointmentForm {
 
 
     int appId = DataBase.getAllAppointments().size()+1;
+    public int id;
+    public String name, address, zipCode, city, phone;
 
     public void customer( Customer customer){
         contactName.setText(customer.getName());
+        name = customer.getName();
+        phone = customer.getPhone();
+        address = customer.getAddress();
+        zipCode = customer.getZipCode();
+        city = customer.getCity();
+        id = customer.getId();
+        this.addNewAppointment = customer.getAllAppointments();
+
     }
     public void cancel(ActionEvent e)throws IOException {
 
@@ -81,7 +93,8 @@ public class AppointmentForm {
         int customerID = 0;
 
         Contact contact;
-        Appointment newAppt;
+        //Appointment newAppt;
+        Customer upCustomer;
         for(Customer c: DataBase.getAllCustomers()){
             if(c.getName() == contactName.getText()){
                 customerID = c.getId();
@@ -92,16 +105,21 @@ public class AppointmentForm {
 
             String appTittle = tittle.getText(), date = startDate.getValue().toString(), description = descriptionTxt.getText(),
                 location = locationTxt.getText(), mail = email.getText(), hour = time.getValue().toString(),
-                    type = typeOfApp.getValue().toString(), name = contactName.getText();
-            contact = new Contact(newContact.size()+1, name, mail);
+                    type = typeOfApp.getValue().toString();
+            contact = new Contact(newContact.size()+1, contactName.getText(), mail);
 
             newContact.add(contact);
-
             newAppt = new Appointment(newContact, appId, description, date+" "+hour, date, appTittle,type, location);
+            addNewAppointment.add(newAppt);
+
+            upCustomer = new Customer(addNewAppointment, id, name, address, zipCode, city, phone);
 
             DataBase.addAppointment(newAppt);
 
-            showMessageDialog(null, "Customer: " + name
+            DataBase.updateCustomer(id, upCustomer);
+
+
+            showMessageDialog(null, "Customer: " + contactName.getText()
                                 +"\nDate: " + date);
 
             System.out.println("Appointment ID: " + appId);
@@ -153,6 +171,7 @@ public class AppointmentForm {
         timeToSet.add(localTimeZone("11:00:00"));
         timeToSet.add(localTimeZone("12:00:00"));
 
+        //This needs work
         for(Appointment appointment: DataBase.getAllAppointments()){
 
             if(appointment.getStart().contains(" ")){
@@ -162,7 +181,7 @@ public class AppointmentForm {
                 }
             }
         }
-        
+
         time.getItems().addAll(timeToSet);
     }
 

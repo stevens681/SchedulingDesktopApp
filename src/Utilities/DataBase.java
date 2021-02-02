@@ -298,6 +298,10 @@ public class DataBase {
             showMessageDialog(null, "This customer already exists!");
     }
 
+    public static void updateCustomer(int index, Customer selectedCustomer){
+        getAllCustomers().set(index -1, selectedCustomer);
+    }
+
     public static void addAppointment(Appointment newAppointment){
         allAppointments.add(newAppointment);
     }

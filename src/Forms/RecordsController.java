@@ -1,8 +1,10 @@
 package Forms;
 
+import Utilities.Appointment;
 import Utilities.Customer;
 import Utilities.DataBase;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +24,15 @@ import static javax.swing.JOptionPane.showMessageDialog;
 public class RecordsController {
 
     @FXML
-    private TableView custTable;
+    private  TableView<Appointment> custTable;
+    private ObservableList<Appointment> appointmentList;
+    Customer selectedCustomer;
+
+    public void selectedCustomer(Customer customer){
+        this.appointmentList = customer.getAllAppointments();
+        custTable.setItems(appointmentList);
+        selectedCustomer = customer;
+    }
 
     @FXML
     public void button(ActionEvent e)throws IOException {
@@ -38,18 +48,18 @@ public class RecordsController {
 
     @FXML
     public void apptButton(ActionEvent e) throws IOException {
-        Customer customer = (Customer) custTable.getSelectionModel().getSelectedItem();
+        //Customer customer = selectedCustomer;
         Parent parent;
         Stage stage;
 
-        if (customer == null)
+        if (selectedCustomer == null)
             showMessageDialog(null, "Please select a customer");
         else {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentForm.fxml"));
             loader.load();
             AppointmentForm selected = loader.getController();
-            selected.customer((Customer) custTable.getSelectionModel().getSelectedItem());
+            selected.customer((Customer) selectedCustomer);
             parent = loader.getRoot();
             stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             stage.setScene(new Scene(parent));
@@ -61,11 +71,11 @@ public class RecordsController {
     public void colCreator(String tbls) {
 
         String[] lblCustomer = {"ID", "Appointments"};
-        String[] areas = {"id", "name"};
+        String[] areas = {"aptId", "tittle"};
         int colWidth;
 
-        if (tbls.toLowerCase().equals("customer")) {
-           custTable.setItems(DataBase.getAllCustomers());
+        if (tbls.toLowerCase().equals("appointment")) {
+           custTable.setItems(DataBase.getAllAppointments());
 
             for (int i = 0; i < 2; i++) {
                 if (lblCustomer[i].equals("ID"))
@@ -74,7 +84,7 @@ public class RecordsController {
                     colWidth = 450;
 
                 TableColumn column = new TableColumn(lblCustomer[i]);
-                column.setCellValueFactory(new PropertyValueFactory<Customer, String>(areas[i]));
+                column.setCellValueFactory(new PropertyValueFactory<Appointment, String>(areas[i]));
                 column.setMinWidth(colWidth);
                 custTable.getColumns().addAll(column);
             }
@@ -84,6 +94,6 @@ public class RecordsController {
 
     @FXML
     public void initialize(){
-        colCreator("customer");
+        colCreator("appointment");
     }
 }

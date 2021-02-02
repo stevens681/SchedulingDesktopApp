@@ -92,6 +92,28 @@ public class MainForm {
         }
     }
 
+    @FXML
+    public void records(ActionEvent e) throws IOException {
+        Customer customer =  custTable.getSelectionModel().getSelectedItem();
+        Parent parent;
+        Stage stage;
+
+        if (customer == null)
+            showMessageDialog(null, "Please select a customer");
+        else {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Records.fxml"));
+            loader.load();
+            RecordsController selected = loader.getController();
+            selected.selectedCustomer(custTable.getSelectionModel().getSelectedItem());
+            parent = loader.getRoot();
+            stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(parent));
+            stage.show();
+
+        }
+    }
+
     /**
      * Initializes the form.
      * */
