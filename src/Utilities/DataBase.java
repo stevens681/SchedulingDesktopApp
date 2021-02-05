@@ -2,6 +2,7 @@ package Utilities;
 
 
 
+import Forms.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -185,6 +186,20 @@ public class DataBase {
         return id;
 
     }
+    /**
+     * Remove a customer
+     * @param selectedCustomer The selected product
+     * @return If the part is deleted
+     */
+    public static boolean deleteCustomer(Customer selectedCustomer) {
+        for(Customer c: allCustomers) {
+            if (c.getId() == selectedCustomer.getId()) {
+                allCustomers.remove(c);
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     public static void pullCustomers(){
@@ -243,7 +258,7 @@ public class DataBase {
 
     }
 
-    public static void addCustomer(Customer newCustomer, String country){
+    public static void addCustomer(Customer newCustomer){
 
         String name = newCustomer.getName(), address = newCustomer.getAddress(),
                 phone = newCustomer.getPhone(), zip = newCustomer.getZipCode(),
@@ -255,7 +270,7 @@ public class DataBase {
         boolean exist = true;
 
         for(Customer c : allCustomers){
-            if(newCustomer.getName().toLowerCase().equals(c.getName().toLowerCase())){
+            if(newCustomer.getName().equalsIgnoreCase(c.getName())){
                 exist =false;
 
             }
@@ -265,9 +280,9 @@ public class DataBase {
 
             try{
                 Statement data = Connect.sendData().createStatement();
-                SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date date = new Date(System.currentTimeMillis());
-                String time = formatter.format(date);
+//                SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                Date date = new Date(System.currentTimeMillis());
+                String time = Main.time();
 
                 String query = "INSERT INTO customers (Customer_ID, Address, Create_Date, " +
                         "Created_By, Customer_Name, Division_ID, " +

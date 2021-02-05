@@ -3,7 +3,6 @@ package Forms;
 import Utilities.Appointment;
 import Utilities.Customer;
 import Utilities.DataBase;
-
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,12 +11,18 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
@@ -25,13 +30,34 @@ public class RecordsController {
 
     @FXML
     private  TableView<Appointment> custTable;
+    @FXML
+    private Label addressLabel;
+    @FXML
+    private Label nameLabel;
+
     private ObservableList<Appointment> appointmentList;
     Customer selectedCustomer;
 
     public void selectedCustomer(Customer customer){
+        String table = "first_level_divisions", columnFrom= "Division_ID", columnResult ="Division";
+        int countryId = DataBase.idToId(customer.getCity(), "first_level_divisions", "Division_ID","COUNTRY_ID");
+        String country = "";
+        String number = customer.getPhone().replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
+
+        switch (countryId) {
+            case 38 -> country = "CA";
+            case 230 -> country = "UK";
+            case 231 -> country = "US";
+        }
+
         this.appointmentList = customer.getAllAppointments();
         custTable.setItems(appointmentList);
         selectedCustomer = customer;
+        addressLabel.setText(country + ", " + customer.getAddress() + ", " +
+                DataBase.getSearchName(customer.getCity(), table, columnFrom, columnResult)+"\nTel: "+
+                number);
+        nameLabel.setText(customer.getName() );
+
     }
 
     @FXML
@@ -39,49 +65,101 @@ public class RecordsController {
 
         switch (((Button) e.getSource()).getText()) {
             case "Add Appointment" -> apptButton(e);
-            //case "Modify Customer" -> modCustomer(e);
+            case "Details" -> detail(e);
             case "Back" -> Main.callForms(e, "MainForm");
-            //case "Log" -> Main.callForms(e, "log");
+
         }
 
     }
 
     @FXML
     public void apptButton(ActionEvent e) throws IOException {
-        //Customer customer = selectedCustomer;
+
         Parent parent;
         Stage stage;
 
-        if (selectedCustomer == null)
-            showMessageDialog(null, "Please select a customer");
-        else {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentForm.fxml"));
+        loader.load();
+        AppointmentForm selected = loader.getController();
+        selected.customer(selectedCustomer);
+        parent = loader.getRoot();
+        stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(parent));
+        stage.show();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentForm.fxml"));
-            loader.load();
-            AppointmentForm selected = loader.getController();
-            selected.customer((Customer) selectedCustomer);
-            parent = loader.getRoot();
-            stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(parent));
-            stage.show();
-
-        }
     }
 
+    /**
+     * The detail button
+     * @param e ActionEvent
+     * @throws IOException Check for exception
+     * */
+    @FXML
+    public void detail(ActionEvent e) throws IOException{
+        Appointment appointmentDetail = custTable.getSelectionModel().getSelectedItem();
+        if(!appointmentList.isEmpty()){
+            if(appointmentDetail == null){
+                showMessageDialog(null, "Please select a customer.");
+            }
+            else{
+                String msg = "Customer: "+selectedCustomer.getName()
+                        +"\nLocation: "+ appointmentDetail.getLocation()
+                        +"\nTime: "+localTimeZone(appointmentDetail.getStart());
+                showMessageDialog(null, msg, "Appointment", JOptionPane.PLAIN_MESSAGE);
+            }
+        }
+        else
+            showMessageDialog(null, "Please Add a New Appointment", "EMPTY APPOINTMENT", JOptionPane.PLAIN_MESSAGE);
+
+
+    }
+
+    /**
+     * Provides the local timezone
+     * @param time The UTC time
+     * @return Local time
+     * */
+    public static String localTimeZone(String time){
+
+        time = Main.convertZone(time);
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+        DateFormat outFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa z");
+        Date date = null;
+        try {
+            date= format.parse(time);
+            time = outFormat.format(date);
+
+        }
+        catch (ParseException e){
+            e.printStackTrace();
+        }
+        String[] splitTime = time.split(" ", -1);
+
+        time = splitTime[1] + " " + splitTime[2] + " " + splitTime[3] ;
+
+        return time;
+
+    }
+
+    /**
+     * This will create the tableview and populate the cells
+     * @param  tbls the name of the table
+     * */
+    @FXML
     public void colCreator(String tbls) {
 
-        String[] lblCustomer = {"ID", "Appointments"};
-        String[] areas = {"aptId", "tittle"};
+        String[] lblCustomer = {"ID", "Description", "Type"};
+        String[] areas = {"aptId", "description", "type"};
         int colWidth;
 
-        if (tbls.toLowerCase().equals("appointment")) {
+        if (tbls.equalsIgnoreCase("appointment")) {
            custTable.setItems(DataBase.getAllAppointments());
 
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 3; i++) {
                 if (lblCustomer[i].equals("ID"))
-                    colWidth = 50;
+                    colWidth = 20;
                 else
-                    colWidth = 450;
+                    colWidth = 240;
 
                 TableColumn column = new TableColumn(lblCustomer[i]);
                 column.setCellValueFactory(new PropertyValueFactory<Appointment, String>(areas[i]));
@@ -92,6 +170,9 @@ public class RecordsController {
 
     }
 
+    /**
+     * Initializes the form.
+     * */
     @FXML
     public void initialize(){
         colCreator("appointment");

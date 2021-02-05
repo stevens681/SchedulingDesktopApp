@@ -13,23 +13,15 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-
+import javax.swing.*;
 import java.io.IOException;
-
 import static javax.swing.JOptionPane.showMessageDialog;
 
 
 public class MainForm {
+
     @FXML
     private Label user;
-    @FXML
-    private Button addCustBtn;
-    @FXML
-    private Button addNewAp;
-    @FXML
-    private Button cusReBtn;
-    @FXML
-    private Button logBtn;
     @FXML
     private TableView<Customer> custTable;
 
@@ -41,8 +33,34 @@ public class MainForm {
             case "Modify Customer" -> modCustomer(e);
             case "Customer Records" -> Main.callForms(e, "Records");
             case "Log" -> Main.callForms(e, "log");
+            case "Delete Customer" -> deleteCustomer(e);
         }
 
+    }
+
+    /**
+     * This delete a selected customer
+     * Updates the table view
+     * @param e ActionEvent
+     */
+    @FXML
+    public void deleteCustomer(ActionEvent e) {
+
+
+
+        Customer customer = custTable.getSelectionModel().getSelectedItem();        //Gets the selected product
+
+        if(customer.getAllAppointments().isEmpty()){
+            int m = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this customer?");
+            if(m == JOptionPane.YES_OPTION){
+
+                DataBase.deleteCustomer(customer);
+                custTable.setItems(DataBase.getAllCustomers());       //Updates the table
+            }
+        }else{
+            showMessageDialog(null, "This customer has appointments, " +
+                    "please delete all the appointments before deleting the customer.");
+        }
     }
 
     public void colCreator(String tbls) {
@@ -51,7 +69,7 @@ public class MainForm {
         String[] areas = {"id", "name"};
         int colWidth;
 
-        if (tbls.toLowerCase().equals("customer")) {
+        if (tbls.equalsIgnoreCase("customer")) {
             custTable.setItems(DataBase.getAllCustomers());
 
             for (int i = 0; i < 2; i++) {

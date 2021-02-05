@@ -27,7 +27,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 
 public class AppointmentForm {
-    Appointment appointment;
+
     private final ObservableList<Contact> newContact = FXCollections.observableArrayList();
     private ObservableList<Appointment> addNewAppointment = FXCollections.observableArrayList();
     private Appointment newAppt;
@@ -68,16 +68,10 @@ public class AppointmentForm {
     }
     public void cancel(ActionEvent e)throws IOException {
 
-        Main.callForms(e, "Records");
+        Main.callForms(e, "MainForm");
     }
 
 
-//    public void fillContact(){
-//
-//        for(Customer c: DataBase.getAllCustomers()){
-//            contactName.getItems().addAll(c.getName());
-//        }
-//    }
 
     public void fillType(){
 
@@ -88,12 +82,12 @@ public class AppointmentForm {
 
     }
 
-    //This need the right timezone
+
     public void save(ActionEvent e)throws IOException {
         int customerID = 0;
 
         Contact contact;
-        //Appointment newAppt;
+
         Customer upCustomer;
         for(Customer c: DataBase.getAllCustomers()){
             if(c.getName() == contactName.getText()){
@@ -104,7 +98,7 @@ public class AppointmentForm {
         if(check()){
 
             String appTittle = tittle.getText(), date = startDate.getValue().toString(), description = descriptionTxt.getText(),
-                location = locationTxt.getText(), mail = email.getText(), hour = time.getValue().toString(),
+                location = locationTxt.getText(), mail = email.getText(), hour = time.getValue().toString() + " UTC",
                     type = typeOfApp.getValue().toString();
             contact = new Contact(newContact.size()+1, contactName.getText(), mail);
 
@@ -117,7 +111,6 @@ public class AppointmentForm {
             DataBase.addAppointment(newAppt);
 
             DataBase.updateCustomer(id, upCustomer);
-
 
             showMessageDialog(null, "Customer: " + contactName.getText()
                                 +"\nDate: " + date);
@@ -148,10 +141,10 @@ public class AppointmentForm {
      * @param arr The array to be expanded
      * @param x The string  to be added
      * */
-    public static String[] addString(int n, String arr[], String x) {
+    public static String[] addString(int n, String[] arr, String x) {
         int i;
 
-        String newArr[] = new String[n + 1];
+        String[] newArr = new String[n + 1];
 
         for (i = 0; i < n; i++)
             newArr[i] = arr[i];
@@ -165,11 +158,11 @@ public class AppointmentForm {
 
         time.getItems().clear();
         ArrayList<String> timeToSet = new ArrayList<String>();
-        timeToSet.add(localTimeZone("08:00:00"));
-        timeToSet.add(localTimeZone("09:00:00"));
-        timeToSet.add(localTimeZone("10:00:00"));
-        timeToSet.add(localTimeZone("11:00:00"));
-        timeToSet.add(localTimeZone("12:00:00"));
+        timeToSet.add("08:00:00");
+        timeToSet.add("09:00:00");
+        timeToSet.add("10:00:00");
+        timeToSet.add("11:00:00");
+        timeToSet.add("12:00:00");
 
         //This needs work
         for(Appointment appointment: DataBase.getAllAppointments()){

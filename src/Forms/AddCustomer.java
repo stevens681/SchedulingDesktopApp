@@ -62,7 +62,7 @@ public class AddCustomer {
                     state = stateCombo.getValue().toString();
 
             Customer customer = new Customer(id, name, address, zip, state, phone);
-            DataBase.addCustomer(customer, country);
+            DataBase.addCustomer(customer);
 
             lbl.setText(DataBase.getUser().toUpperCase()+" Customer added");
             Main.callForms(e, "MainForm");
