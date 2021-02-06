@@ -28,6 +28,8 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 public class RecordsController {
 
+    Customer selectedCustomer;
+
     @FXML
     private  TableView<Appointment> custTable;
     @FXML
@@ -36,7 +38,7 @@ public class RecordsController {
     private Label nameLabel;
 
     private ObservableList<Appointment> appointmentList;
-    Customer selectedCustomer;
+
 
     public void selectedCustomer(Customer customer){
         String table = "first_level_divisions", columnFrom= "Division_ID", columnResult ="Division";

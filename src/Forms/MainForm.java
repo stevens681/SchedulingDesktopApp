@@ -25,6 +25,10 @@ public class MainForm {
     @FXML
     private TableView<Customer> custTable;
 
+    /**
+     * The handler of the buttons
+     * @param e ActionEvent
+     * */
     @FXML
     public void button(ActionEvent e)throws IOException {
 
@@ -57,7 +61,8 @@ public class MainForm {
                 DataBase.deleteCustomer(customer);
                 custTable.setItems(DataBase.getAllCustomers());       //Updates the table
             }
-        }else{
+        }
+        else{
             showMessageDialog(null, "This customer has appointments, " +
                     "please delete all the appointments before deleting the customer.");
         }
@@ -93,6 +98,7 @@ public class MainForm {
         Customer customer =  custTable.getSelectionModel().getSelectedItem();
         Parent parent;
         Stage stage;
+
 
         if (customer == null)
             showMessageDialog(null, "Please select a customer");
