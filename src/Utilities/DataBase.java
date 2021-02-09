@@ -1,17 +1,13 @@
 package Utilities;
 
-
-
 import Forms.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
@@ -19,11 +15,12 @@ import static javax.swing.JOptionPane.showMessageDialog;
 public class DataBase {
 
     private static final ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
-    private static final ObservableList<String> allCountries = FXCollections.observableArrayList();
+    private static final ObservableList<Contact> allContacts = FXCollections.observableArrayList();
     private static final ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
     private static final ObservableList<String> canada = FXCollections.observableArrayList();
     private static final ObservableList<String> uk = FXCollections.observableArrayList();
     private static final ObservableList<String> usa = FXCollections.observableArrayList();
+    private static final ObservableList<String> allCountries = FXCollections.observableArrayList();
     private static String user;
 
 
@@ -184,8 +181,8 @@ public class DataBase {
         }
 
         return id;
-
     }
+
     /**
      * Remove a customer
      * @param selectedCustomer The selected product
@@ -209,10 +206,8 @@ public class DataBase {
             ResultSet results = data.executeQuery(query);
             while(results.next()) {
                 Customer customer = new Customer(results.getInt("Customer_ID"),
-                        results.getString("Customer_Name"),
-                        results.getString("Address"),
-                        results.getString("Postal_Code"),
-                        results.getString("Division_ID"),
+                        results.getString("Customer_Name"), results.getString("Address"),
+                        results.getString("Postal_Code"), results.getString("Division_ID"),
                         results.getString("Phone"));
                 allCustomers.add(customer);
             }
@@ -222,39 +217,126 @@ public class DataBase {
             showMessageDialog(null,"SQLException: " + e.getMessage());
             
         }
-
     }
 
-    public static void testSql(){
-        String table = "first_level_divisions", columnFrom= "Division", columnResult ="Division_ID";
-
+    public static void pullContacts(){
+        ObservableList<Contact> newContact = FXCollections.observableArrayList();
         try {
-            System.out.println("Test");
             Statement data = Connect.sendData().createStatement();
-            String query = "SELECT * FROM appointments";
+            String query = "SELECT * FROM contacts";
             ResultSet results = data.executeQuery(query);
             while(results.next()) {
-                String t = results.getString("Location");
-                System.out.println(t+"Inside the loop");
-//                if(!results.next()){
-//                    System.out.println("Creator: "+
-//                            results.getString("Created_By")+
-//                            "Name: "+ results.getString("Customer_Name")+
-//                            "Division ID: "+results.getString("Division_ID")+
-//                            "Date: "+results.getString("Create_Date"));
-//                }
+                Contact contact = new Contact(results.getInt("Contact_ID"),
+                        results.getString("Contact_Name"), results.getString("Email"));
 
-           }
+                newContact.add(contact);
+                allContacts.add(contact);
+                for(Appointment a: allAppointments){
+                    if(a.getAptId() == results.getInt("Contact_ID")){
+                        a.addContact(contact);
+                    }
+                }
+            }
             data.close();
 
         } catch (SQLException e) {
             showMessageDialog(null,"SQLException: " + e.getMessage());
 
         }
-        int i=getSearchID("Alabama", table, columnFrom, columnResult);
-        String g = Integer.toString(i);
+    }
 
-        System.out.println("City: "+g );
+    public static void pullAppointments(){
+        ObservableList<Appointment> newAppointment = FXCollections.observableArrayList();
+        try {
+            Statement data = Connect.sendData().createStatement();
+            String query = "SELECT * FROM appointments";
+            ResultSet results = data.executeQuery(query);
+            while(results.next()) {
+                Appointment appointment = new Appointment(results.getInt("Appointment_ID"),
+                        results.getString("Description"), results.getString("Start"),
+                        results.getString("End"), results.getString("Title"),
+                        results.getString("Type"), results.getString("Location"));
+                newAppointment.add(appointment);
+                allAppointments.add(appointment);
+                for(Customer c: allCustomers){
+                    if(c.getId() == results.getInt("Customer_ID")){
+                        c.addAppointment(appointment);
+                    }
+                }
+
+            }
+
+            data.close();
+
+        } catch (SQLException e) {
+            showMessageDialog(null,"SQLException: " + e.getMessage());
+
+        }
+
+    }
+
+    public static void testSql(){
+//        String table = "first_level_divisions", columnFrom= "Division", columnResult ="Division_ID";
+//
+//        try {
+//            System.out.println("Test");
+//            Statement data = Connect.sendData().createStatement();
+//            String query = "SELECT * FROM appointments";
+//            ResultSet results = data.executeQuery(query);
+//            while(results.next()) {
+//                String t = results.getString("Location");
+//                System.out.println(t+"Inside the loop");
+////                if(!results.next()){
+////                    System.out.println("Creator: "+
+////                            results.getString("Created_By")+
+////                            "Name: "+ results.getString("Customer_Name")+
+////                            "Division ID: "+results.getString("Division_ID")+
+////                            "Date: "+results.getString("Create_Date"));
+////                }
+//
+//           }
+//            data.close();
+//
+//        } catch (SQLException e) {
+//            showMessageDialog(null,"SQLException: " + e.getMessage());
+//
+//        }
+
+//        try {
+//            Statement data = Connect.sendData().createStatement();
+//            String query = "SELECT * FROM contacts";
+//            ResultSet results = data.executeQuery(query);
+//            while(results.next()) {
+//                Contact contact = new Contact(results.getInt("Contact_ID"),
+//                        results.getString("Contact_Name"),
+//                        results.getString("Email"));
+//
+////                allContacts.add(contact);
+//                System.out.println(contact.getId());
+//            }
+//            data.close();
+//
+//        } catch (SQLException e) {
+//            showMessageDialog(null,"SQLException: " + e.getMessage());
+//
+//        }
+
+//        try{
+//            Statement data = Connect.sendData().createStatement();
+//
+//            String query = "INSERT INTO contacts (Contact_ID, Contact_Name, Email)";
+//
+//            String values = " VALUES ('"+2+"', 'Customer Three', 'c3@test.com')";
+//
+//            PreparedStatement statement = Connect.sendData().prepareStatement(query+values);
+//            statement.executeUpdate();
+//
+//            data.close();
+//
+//        }catch (SQLException e){
+//            showMessageDialog(null,"Adding the contact SQLException: " + e.getMessage());
+//        }
+
 
     }
 
@@ -262,10 +344,9 @@ public class DataBase {
 
         String name = newCustomer.getName(), address = newCustomer.getAddress(),
                 phone = newCustomer.getPhone(), zip = newCustomer.getZipCode(),
-                state = newCustomer.getCity();
-        int id=newCustomer.getId();
+                state = newCustomer.getCity(), user = DataBase.getUser();
 
-        String user = DataBase.getUser();
+        int id=newCustomer.getId();
 
         boolean exist = true;
 
@@ -280,22 +361,15 @@ public class DataBase {
 
             try{
                 Statement data = Connect.sendData().createStatement();
-//                SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                Date date = new Date(System.currentTimeMillis());
-                String time = Main.time();
 
                 String query = "INSERT INTO customers (Customer_ID, Address, Create_Date, " +
                         "Created_By, Customer_Name, Division_ID, " +
                         "Phone, Postal_Code)";
 
-                String values = " VALUES ('"+id+"', '"+
-                        address+"', '"+
-                        time+"', '"+
-                        user+"', '"+
-                        name+"', '"+
+                String values = " VALUES ('" + id + "', '"+ address + "', '" +
+                        java.time.LocalDate.now() + "', '" + user + "', '" + name + "', '" +
                         getSearchID(state, "first_level_divisions", "Division", "Division_ID")+"', '"+
-                        phone+"', '"+
-                        zip+"')";
+                        phone + "', '" + zip + "')";
 
                 PreparedStatement statement = Connect.sendData().prepareStatement(query+values);
                 statement.executeUpdate();
@@ -317,16 +391,112 @@ public class DataBase {
         getAllCustomers().set(index -1, selectedCustomer);
     }
 
-    public static void addAppointment(Appointment newAppointment){
-        allAppointments.add(newAppointment);
+    public static void addAppointment(Appointment newAppointment, int contactID, int customerID){
+
+        String description = newAppointment.getDescription(), start = newAppointment.getStart(),
+                        end = newAppointment.getEnd(), tittle = newAppointment.getTittle(),
+                        location = newAppointment.getLocation(), type = newAppointment.getType(),
+                        user = DataBase.getUser();
+
+        int id = newAppointment.getAptId();
+
+        boolean exist = true;
+
+        for(Appointment appointment : allAppointments){
+            if(newAppointment.getAptId() == appointment.getAptId()){
+                exist =false;
+
+            }
+        }
+
+        if(exist) {
+
+            try{
+                Statement data = Connect.sendData().createStatement();
+
+                String time = Main.time();
+
+                String query = "INSERT INTO appointments (Appointment_ID, Create_Date, " +
+                        "Created_By, Customer_ID, Description, End, Last_Update, Last_Updated_By, " +
+                        "Location, Start, Title, Type)";
+                System.out.println("This is the query >"+query);
+
+
+                String values = " VALUES ('"+id+"', '"+
+                        java.time.LocalDate.now()+"', '"+
+                        user+"', '"+
+                        customerID+"', '"+
+                        description+"', '"+
+                        end+"', '"+
+                        java.time.LocalDate.now()+"', '"+
+                        user+"', '"+
+                        location+"', '"+
+                        start+"', '"+
+                        tittle+"', '"+
+                        type+"')";
+                System.out.println("This is the values >"+values);
+
+                PreparedStatement statement = Connect.sendData().prepareStatement(query+values);
+                statement.executeUpdate();
+
+                data.close();
+
+            }catch (SQLException e){
+                showMessageDialog(null,"Adding the appointment SQLException: " + e.getMessage());
+            }
+            allAppointments.add(newAppointment);
+        }
+        else
+            showMessageDialog(null, "This  already exists!");
+
+    }
+
+    public static void addContact(Contact newContact){
+
+        String name = newContact.getName(), email = newContact.getEmail();
+
+        int id=newContact.getId();
+
+        boolean exist = true;
+
+        for(Contact c : allContacts){
+            if(newContact.getEmail().equalsIgnoreCase(c.getEmail())){
+                exist =false;
+
+            }
+        }
+
+        if(exist){
+
+            try{
+                Statement data = Connect.sendData().createStatement();
+
+                String query = "INSERT INTO contacts (Contact_ID, Contact_Name, Email)";
+
+                String values = " VALUES ('"+id+"', '" + name+"', '" + email+"')";
+
+                PreparedStatement statement = Connect.sendData().prepareStatement(query+values);
+                statement.executeUpdate();
+
+                data.close();
+
+            }catch (SQLException e){
+                showMessageDialog(null,"Adding the contact SQLException: " + e.getMessage());
+            }
+
+            allContacts.add(newContact);
+
+        }
+
     }
 
 
     public static ObservableList<Customer>getAllCustomers(){return allCustomers;}
-    public static ObservableList<String>getAllCountries(){return allCountries;}
+    public static ObservableList<Contact>getAllContacts(){return allContacts;}
     public static ObservableList<Appointment>getAllAppointments(){return allAppointments;}
     public static ObservableList<String>getCanada(){return canada;}
     public static ObservableList<String>getUk(){return uk;}
     public static ObservableList<String>getUsa(){return usa;}
+    public static ObservableList<String>getAllCountries(){return allCountries;}
     public static String getUser(){return user;}
 }

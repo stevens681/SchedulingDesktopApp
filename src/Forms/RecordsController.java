@@ -101,12 +101,14 @@ public class RecordsController {
         Appointment appointmentDetail = custTable.getSelectionModel().getSelectedItem();
         if(!appointmentList.isEmpty()){
             if(appointmentDetail == null){
-                showMessageDialog(null, "Please select a customer.");
+                showMessageDialog(null, "Please select a appointment.");
             }
             else{
+                System.out.println(appointmentDetail.getStart());
                 String msg = "Customer: "+selectedCustomer.getName()
                         +"\nLocation: "+ appointmentDetail.getLocation()
-                        +"\nTime: "+localTimeZone(appointmentDetail.getStart());
+                        +"\nTime: "+localTimeZone(appointmentDetail.getStart() + " UTC");
+
                 showMessageDialog(null, msg, "Appointment", JOptionPane.PLAIN_MESSAGE);
             }
         }
@@ -116,9 +118,9 @@ public class RecordsController {
 
     }
 
-    /**
+    /**te
      * Provides the local timezone
-     * @param time The UTC time
+     * @param time The UTC times
      * @return Local time
      * */
     public static String localTimeZone(String time){

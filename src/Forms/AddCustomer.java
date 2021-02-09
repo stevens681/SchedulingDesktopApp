@@ -118,10 +118,10 @@ public class AddCustomer {
 
         countryCombo.getItems().addAll(DataBase.getAllCountries());
 
-        System.out.println("Country "+Connect.getCountry());
         countryCombo.getSelectionModel().select(Connect.getCountry());
         setStateCombo();
         custID.setText("Customer ID:\n"+id);
+
 
     }
 }

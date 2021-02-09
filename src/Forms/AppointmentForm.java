@@ -10,21 +10,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static javax.swing.JOptionPane.showMessageDialog;
-
 
 public class AppointmentForm {
 
@@ -66,11 +61,11 @@ public class AppointmentForm {
         this.addNewAppointment = customer.getAllAppointments();
 
     }
+
     public void cancel(ActionEvent e)throws IOException {
 
         Main.callForms(e, "MainForm");
     }
-
 
 
     public void fillType(){
@@ -84,55 +79,44 @@ public class AppointmentForm {
 
 
     public void save(ActionEvent e)throws IOException {
-        int customerID = 0;
 
         Contact contact;
-
         Customer upCustomer;
-        for(Customer c: DataBase.getAllCustomers()){
-            if(c.getName() == contactName.getText()){
-                customerID = c.getId();
-            }
-        }
 
         if(check()){
 
             String appTittle = tittle.getText(), date = startDate.getValue().toString(), description = descriptionTxt.getText(),
-                location = locationTxt.getText(), mail = email.getText(), hour = time.getValue().toString() + " UTC",
-                    type = typeOfApp.getValue().toString();
+                location = locationTxt.getText(), mail = email.getText(), hour = time.getValue().toString(),
+                    type = typeOfApp.getValue().toString(), end="";
+
+            switch (hour){
+                case "08:00:00" -> end = "08:45:00";
+                case "09:00:00" -> end = "09:45:00";
+                case "10:00:00" -> end = "10:45:00";
+                case "11:00:00" -> end = "11:45:00";
+                case "12:00:00" -> end = "12:45:00";
+            }
+
             contact = new Contact(newContact.size()+1, contactName.getText(), mail);
 
             newContact.add(contact);
-            newAppt = new Appointment(newContact, appId, description, date+" "+hour, date, appTittle,type, location);
+
+            DataBase.addContact(contact);
+
+            newAppt = new Appointment(newContact, appId, description, date+" "+hour, date+" "+end, appTittle,type, location);
+
             addNewAppointment.add(newAppt);
 
             upCustomer = new Customer(addNewAppointment, id, name, address, zipCode, city, phone);
 
-            DataBase.addAppointment(newAppt);
+            DataBase.addAppointment(newAppt, newContact.size()+1, id);
 
             DataBase.updateCustomer(id, upCustomer);
 
             showMessageDialog(null, "Customer: " + contactName.getText()
                                 +"\nDate: " + date);
 
-            System.out.println("Appointment ID: " + appId);
-            System.out.println("Contact ID: " + newContact.size()+1);
-            System.out.println("Created Date: " + Main.time());
-            System.out.println("Created By: "+ DataBase.getUser());
-            System.out.println("Customer ID: "+ customerID );
-            System.out.println("Tittle: "+appTittle);
-            System.out.println("Type: " + type);
-            System.out.println("Description: " +description);
-            System.out.println("Location: " + location);
-            System.out.println("Date: " +date);
-            System.out.println("Contact Name: " + name);
-            System.out.println("Email: " + mail);
-            System.out.println("Time: " + hour);
-            Main.callForms(e, "MainForm");
-
-
         }
-
     }
 
     /**
@@ -153,7 +137,9 @@ public class AppointmentForm {
         return newArr;
     }
 
-    //Work in progress
+    /**
+     * This will fill the time ComboBox
+     **/
     public void getTime(){
 
         time.getItems().clear();
@@ -164,7 +150,6 @@ public class AppointmentForm {
         timeToSet.add("11:00:00");
         timeToSet.add("12:00:00");
 
-        //This needs work
         for(Appointment appointment: DataBase.getAllAppointments()){
 
             if(appointment.getStart().contains(" ")){
@@ -178,29 +163,14 @@ public class AppointmentForm {
         time.getItems().addAll(timeToSet);
     }
 
-    public static String localTimeZone(String time){
-
-        time = "0000-00-00 " + time + " UTC";
-        time = Main.convertZone(time);
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
-        DateFormat outFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa z");
-        Date date = null;
-        try {
-            date= format.parse(time);
-            time = outFormat.format(date);
-
-        }
-        catch (ParseException e){
-            e.printStackTrace();
-        }
-        String[] splitTime = time.split(" ", -1);
-
-        time = splitTime[1] + " " + splitTime[2] + " " + splitTime[3] ;
-
-        return time;
-
-    }
-
+    /**
+     *This will create the calender
+     * it will check if the for the present day
+     * then it will mark off in red all the days
+     * that have passed, and mark off in gray if
+     * there is not anymore appointment place
+     *for the day
+     * */
     private void daysAvailable(){
 
         String[] data = {};
@@ -258,12 +228,22 @@ public class AppointmentForm {
         });
     }
 
+    /**
+     * Split the String time and returns the date
+     * @param dateTime String date
+     * @return the time
+     * */
     public static  String splitTime(String dateTime){
         String[] split = dateTime.split("\\s+");
         dateTime = split[1];
         return dateTime;
     }
 
+    /**
+     * Split the String date and returns the time
+     * @param dateTime String date
+     * @return the date
+     * */
     public static  String splitDate(String dateTime){
         String[] split = dateTime.split("\\s+");
         dateTime = split[0];

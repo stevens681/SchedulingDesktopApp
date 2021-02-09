@@ -52,7 +52,12 @@ public class LoginController {
         if(check){
 
             DataBase.pullCustomers();
+            DataBase.pullAppointments();
+            DataBase.pullContacts();
+
             Main.log("Username: " + username + " Logged in");
+
+//            DataBase.testSql();
             Main.callForms(e, "MainForm");
         }
         else {
@@ -153,6 +158,7 @@ public class LoginController {
      * */
     @FXML
     public void initialize() {
+
 
         location();
 

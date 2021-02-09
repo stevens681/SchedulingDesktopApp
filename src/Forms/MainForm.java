@@ -68,6 +68,10 @@ public class MainForm {
         }
     }
 
+    /**
+     * This will create the tableview and populate the cells
+     * @param  tbls the name of the table
+     * */
     public void colCreator(String tbls) {
 
         String[] lblCustomer = {"ID", "Customer Name"};

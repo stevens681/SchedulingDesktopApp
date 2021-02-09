@@ -105,16 +105,34 @@ public class Main extends Application {
     }
 
     public static String convertZone( String time){
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
-        Date localZone = null;
-        try {
-            localZone = format.parse(time);
-        } catch (ParseException e) {
-            e.printStackTrace();
+
+        if(time.contains(".")){
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS z");
+            DateFormat outFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+            Date localZone = null;
+            try {
+                localZone = format.parse(time);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            format.setTimeZone(TimeZone.getTimeZone(timeZone()));
+            String zone = outFormat.format(localZone);
+            return zone;
         }
-        format.setTimeZone(TimeZone.getTimeZone(timeZone()));
-        String zone = format.format(localZone);
-        return zone;
+
+        else {
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+            Date localZone = null;
+            try {
+                localZone = format.parse(time);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            format.setTimeZone(TimeZone.getTimeZone(timeZone()));
+            String zone = format.format(localZone);
+            return zone;
+        }
+
     }
 
 
