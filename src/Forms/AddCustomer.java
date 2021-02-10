@@ -8,14 +8,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
-
 import javafx.event.ActionEvent;
-
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This will add a customer
+ * @author Fernando Rosa
+ * */
 public class AddCustomer {
 
     @FXML
@@ -39,6 +40,9 @@ public class AddCustomer {
 
     int id = DataBase.getAllCustomers().size()+1;
 
+    /**
+     * Will fill the state ComboBox
+     * */
     public void setStateCombo(){
 
         String country = countryCombo.getValue().toString();
@@ -53,6 +57,12 @@ public class AddCustomer {
         stateCombo.getSelectionModel().select(0);
     }
 
+    /**
+     * This will make sure there is no empty fields
+     * Then will assign all the values
+     * @param e ActionEvent
+     * @throws IOException Failed to go back to the main form or save the customer
+     **/
     public void saveCustomer(ActionEvent e)throws IOException{
 
         if(check()){
@@ -70,11 +80,20 @@ public class AddCustomer {
 
     }
 
+    /**
+     * This will take you back to the main form
+     * @param e ActionEvent
+     * @throws IOException Failed to go back to the main form
+     **/
     public void cancel(ActionEvent e)throws IOException{
 
         Main.callForms(e, "MainForm");
     }
 
+    /**
+     * Checks for empty text fields and logical error
+     * @return If everything is good
+     **/
     private boolean check(){
 
         boolean checked = true;
@@ -106,22 +125,18 @@ public class AddCustomer {
         }
         lbl.setText(DataBase.getUser().toUpperCase()+" Please check\n"+msg);
 
-
         return checked;
-
     }
 
-
+    /**
+     * Initializes the form
+     * */
     public void initialize(){
         lbl.setText(DataBase.getUser().toUpperCase());
         DataBase.pullCountries();
-
         countryCombo.getItems().addAll(DataBase.getAllCountries());
-
         countryCombo.getSelectionModel().select(Connect.getCountry());
         setStateCombo();
         custID.setText("Customer ID:\n"+id);
-
-
     }
 }

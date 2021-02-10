@@ -16,20 +16,21 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-
 import javax.swing.*;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import static javax.swing.JOptionPane.showMessageDialog;
 
+/**
+ * The record form controller
+ * @author Fernando Rosa
+ * */
 public class RecordsController {
 
     Customer selectedCustomer;
-
     @FXML
     private  TableView<Appointment> custTable;
     @FXML
@@ -39,10 +40,15 @@ public class RecordsController {
 
     private ObservableList<Appointment> appointmentList;
 
-
+    /**
+     * This will fill the fields for the customers
+     * @param customer
+     * */
     public void selectedCustomer(Customer customer){
+
         String table = "first_level_divisions", columnFrom= "Division_ID", columnResult ="Division";
-        int countryId = DataBase.idToId(customer.getCity(), "first_level_divisions", "Division_ID","COUNTRY_ID");
+        int countryId = DataBase.idToId(customer.getCity(), "first_level_divisions",
+                "Division_ID","COUNTRY_ID");
         String country = "";
         String number = customer.getPhone().replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
 
@@ -62,6 +68,11 @@ public class RecordsController {
 
     }
 
+    /**
+     * This will read the button and do the action
+     * @param e ActionEvent
+     * @throws IOException failed to do the action
+     * */
     @FXML
     public void button(ActionEvent e)throws IOException {
 
@@ -71,9 +82,13 @@ public class RecordsController {
             case "Back" -> Main.callForms(e, "MainForm");
 
         }
-
     }
 
+    /**
+     * Opens the appointment form
+     * @param e ActionEvent
+     * @throws IOException failed to do the action
+     * */
     @FXML
     public void apptButton(ActionEvent e) throws IOException {
 
@@ -113,7 +128,8 @@ public class RecordsController {
             }
         }
         else
-            showMessageDialog(null, "Please Add a New Appointment", "EMPTY APPOINTMENT", JOptionPane.PLAIN_MESSAGE);
+            showMessageDialog(null, "Please Add a New Appointment", "EMPTY APPOINTMENT",
+                    JOptionPane.PLAIN_MESSAGE);
 
 
     }

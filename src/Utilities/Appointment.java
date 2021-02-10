@@ -3,6 +3,10 @@ package Utilities;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * Appointment class
+ * @author Fernando Rosa
+ * */
 public class Appointment {
 
     ObservableList<Contact> contacts = FXCollections.observableArrayList();

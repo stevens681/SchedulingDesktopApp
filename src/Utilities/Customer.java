@@ -1,9 +1,12 @@
 package Utilities;
 
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * Customer class
+ * @author Fernando Rosa
+ * */
 public class Customer {
 
     private ObservableList<Appointment> appointment = FXCollections.observableArrayList();
@@ -13,8 +16,6 @@ public class Customer {
     private String zipCode;
     private String city;
     private String phone;
-
-
 
     public Customer(int id, String name, String address, String zipCode, String city, String phone){
 

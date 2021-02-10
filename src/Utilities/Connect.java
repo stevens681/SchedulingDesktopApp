@@ -3,7 +3,10 @@ package Utilities;
 import java.sql.*;
 import java.util.Locale;
 
-
+/**
+ * Connect class
+ * @author Fernando Rosa
+ * */
 public class Connect {
 
     private static final String SERVER_NAME = "wgudb.ucertify.com", PORT = "3306",

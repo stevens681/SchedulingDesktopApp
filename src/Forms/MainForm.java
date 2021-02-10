@@ -55,7 +55,8 @@ public class MainForm {
         Customer customer = custTable.getSelectionModel().getSelectedItem();        //Gets the selected product
 
         if(customer.getAllAppointments().isEmpty()){
-            int m = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this customer?");
+            int m = JOptionPane.showConfirmDialog(null,
+                    "Are you sure you want to delete this customer?");
             if(m == JOptionPane.YES_OPTION){
 
                 DataBase.deleteCustomer(customer);
@@ -99,10 +100,10 @@ public class MainForm {
 
     @FXML
     public void modCustomer(ActionEvent e) throws IOException {
+
         Customer customer =  custTable.getSelectionModel().getSelectedItem();
         Parent parent;
         Stage stage;
-
 
         if (customer == null)
             showMessageDialog(null, "Please select a customer");

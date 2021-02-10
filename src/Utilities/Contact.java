@@ -1,5 +1,9 @@
 package Utilities;
 
+/**
+ * Contact class
+ * @author Fernando Rosa
+ * */
 public class Contact {
 
     private int id;

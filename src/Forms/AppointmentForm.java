@@ -21,6 +21,10 @@ import java.util.regex.Pattern;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
+/**
+ * This will add an appointment
+ * @author Fernando Rosa
+ * */
 public class AppointmentForm {
 
     private final ObservableList<Contact> newContact = FXCollections.observableArrayList();
@@ -45,7 +49,6 @@ public class AppointmentForm {
     @FXML
     private Label lbl;
 
-
     int appId = DataBase.getAllAppointments().size()+1;
     public int id;
     public String name, address, zipCode, city, phone;
@@ -62,22 +65,32 @@ public class AppointmentForm {
 
     }
 
+    /**
+     * The cancel button takes you back to the main form
+     * @param e ActionEvent
+     * @throws IOException Failed to go back to the main form
+     * */
     public void cancel(ActionEvent e)throws IOException {
 
         Main.callForms(e, "MainForm");
     }
 
-
+    /**
+     * Fills the type ComboBox
+     * */
     public void fillType(){
 
         String[] type = {"Computer Sales", "Security System", "Technical Support"};
-
         typeOfApp.getItems().addAll(type);
         typeOfApp.getSelectionModel().select(0);
 
     }
 
-
+    /**
+     * The save button add an appointment to a customer
+     * @param e ActionEvent
+     * @throws IOException Failed to save the appointment
+     * */
     public void save(ActionEvent e)throws IOException {
 
         Contact contact;
@@ -88,6 +101,7 @@ public class AppointmentForm {
             String appTittle = tittle.getText(), date = startDate.getValue().toString(), description = descriptionTxt.getText(),
                 location = locationTxt.getText(), mail = email.getText(), hour = time.getValue().toString(),
                     type = typeOfApp.getValue().toString(), end="";
+            int contactId = DataBase.getAllContacts().size()+1;
 
             switch (hour){
                 case "08:00:00" -> end = "08:45:00";
@@ -97,25 +111,27 @@ public class AppointmentForm {
                 case "12:00:00" -> end = "12:45:00";
             }
 
-            contact = new Contact(newContact.size()+1, contactName.getText(), mail);
+            contact = new Contact(contactId, contactName.getText(), mail);
 
             newContact.add(contact);
 
             DataBase.addContact(contact);
 
-            newAppt = new Appointment(newContact, appId, description, date+" "+hour, date+" "+end, appTittle,type, location);
+            newAppt = new Appointment(newContact, appId, description, date+" "+hour,
+                    date+" "+end, appTittle,type, location);
 
             addNewAppointment.add(newAppt);
 
             upCustomer = new Customer(addNewAppointment, id, name, address, zipCode, city, phone);
 
-            DataBase.addAppointment(newAppt, newContact.size()+1, id);
+            DataBase.addAppointment(newAppt, contactId, id);
 
             DataBase.updateCustomer(id, upCustomer);
 
             showMessageDialog(null, "Customer: " + contactName.getText()
                                 +"\nDate: " + date);
 
+            Main.callForms(e, "MainForm");
         }
     }
 
@@ -150,12 +166,13 @@ public class AppointmentForm {
         timeToSet.add("11:00:00");
         timeToSet.add("12:00:00");
 
+
         for(Appointment appointment: DataBase.getAllAppointments()){
 
+            String remove = appointment.getStart().substring(0, appointment.getStart().indexOf("."));;
             if(appointment.getStart().contains(" ")){
-                if(splitDate(appointment.getStart()).equals(startDate.getValue().toString())){
-                    timeToSet.remove(splitTime(appointment.getStart()));
-
+                if(splitDate(remove).equals(startDate.getValue().toString())){
+                    timeToSet.remove(splitTime(remove));
                 }
             }
         }
@@ -250,6 +267,10 @@ public class AppointmentForm {
         return dateTime;
     }
 
+    /**
+     * Checks for empty text fields and logical error
+     * @return If everything is good
+     **/
     private boolean check(){
 
         boolean checked = true;

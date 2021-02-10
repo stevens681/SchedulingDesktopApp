@@ -129,7 +129,6 @@ public class DataBase {
         }
 
         return id;
-
     }
 
     public static String getSearchName(String idToName, String table, String columnFrom, String columnResult){
@@ -272,7 +271,6 @@ public class DataBase {
             showMessageDialog(null,"SQLException: " + e.getMessage());
 
         }
-
     }
 
     public static void testSql(){
@@ -320,13 +318,13 @@ public class DataBase {
 //            showMessageDialog(null,"SQLException: " + e.getMessage());
 //
 //        }
-
+//
 //        try{
 //            Statement data = Connect.sendData().createStatement();
 //
 //            String query = "INSERT INTO contacts (Contact_ID, Contact_Name, Email)";
 //
-//            String values = " VALUES ('"+2+"', 'Customer Three', 'c3@test.com')";
+//            String values = " VALUES ('"+3+"', 'Customer One', 'cone@test.com')";
 //
 //            PreparedStatement statement = Connect.sendData().prepareStatement(query+values);
 //            statement.executeUpdate();
@@ -388,7 +386,52 @@ public class DataBase {
     }
 
     public static void updateCustomer(int index, Customer selectedCustomer){
-        getAllCustomers().set(index -1, selectedCustomer);
+
+        String name = selectedCustomer.getName(), address = selectedCustomer.getAddress(),
+                phone = selectedCustomer.getPhone(), zip = selectedCustomer.getZipCode(),
+                state = selectedCustomer.getCity(), user = DataBase.getUser();
+
+        int id=selectedCustomer.getId();
+
+//        boolean exist = true;
+//
+//        for(Customer c : allCustomers){
+//            if(newCustomer.getName().equalsIgnoreCase(c.getName())){
+//                exist =false;
+//
+//            }
+//        }
+
+//        if(exist){
+
+            try{
+                Statement data = Connect.sendData().createStatement();
+
+                String query = "UPDATE customers SET Address='"+address+"', Customer_Name='"+name+
+                        "', Division_ID='"+getSearchID(state, "first_level_divisions", "Division", "Division_ID")+
+                        "', Last_Update='"+java.time.LocalDate.now()+"', Last_Updated_By='"+user+"', Phone='"+phone+"', Postal_Code='"+zip+
+                        "' WHERE Customer_ID='"+id+"'";
+//
+//                String values = " VALUES ('" + id + "', '"+ address + "', '" +
+//                        java.time.LocalDate.now() + "', '" + user + "', '" + name + "', '" +
+//                        getSearchID(state, "first_level_divisions", "Division", "Division_ID")+"', '"+
+//                        phone + "', '" + zip + "')";
+//
+                PreparedStatement statement = Connect.sendData().prepareStatement(query);
+                statement.executeUpdate(query);
+
+                data.close();
+
+            }catch (SQLException e){
+                showMessageDialog(null,"Adding the customer SQLException: " + e.getMessage());
+            }
+
+            getAllCustomers().set(index -1, selectedCustomer);
+
+
+//        else
+//            showMessageDialog(null, "This customer already exists!");
+
     }
 
     public static void addAppointment(Appointment newAppointment, int contactID, int customerID){
@@ -416,13 +459,13 @@ public class DataBase {
 
                 String time = Main.time();
 
-                String query = "INSERT INTO appointments (Appointment_ID, Create_Date, " +
+                String query = "INSERT INTO appointments (Appointment_ID, Contact_ID, Create_Date, " +
                         "Created_By, Customer_ID, Description, End, Last_Update, Last_Updated_By, " +
                         "Location, Start, Title, Type)";
                 System.out.println("This is the query >"+query);
 
 
-                String values = " VALUES ('"+id+"', '"+
+                String values = " VALUES ('"+id+"', '"+contactID+"', '"+
                         java.time.LocalDate.now()+"', '"+
                         user+"', '"+
                         customerID+"', '"+

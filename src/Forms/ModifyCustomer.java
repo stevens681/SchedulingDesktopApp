@@ -8,11 +8,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This will modify a customer
+ * @author Fernando Rosa
+ * */
 public class ModifyCustomer {
 
     @FXML
@@ -33,8 +36,13 @@ public class ModifyCustomer {
     private Label lbl;
     @FXML
     private Label custID;
+    private int id;
 
 
+    /**
+     * This will fill the customer fields
+     * @param customer The selected customer
+     * */
     public void selectedCustomer(Customer customer) {
         String table = "first_level_divisions", columnFrom= "Division_ID", columnResult ="Division";
         int countryId = DataBase.idToId(customer.getCity(), "first_level_divisions", "Division_ID","COUNTRY_ID");
@@ -45,6 +53,7 @@ public class ModifyCustomer {
             case 230 -> country = "United Kingdom";
             case 231 -> country = "United States";
         }
+        id = customer.getId();
         custID.setText("Customer ID:\n"+ customer.getId());
         custNameTxt.setText(customer.getName());
         custAddressTxt.setText(customer.getAddress());
@@ -52,31 +61,51 @@ public class ModifyCustomer {
         custZipTxt.setText(customer.getZipCode());
         countryCombo.getSelectionModel().select(country);
         stateCombo.getSelectionModel().select(DataBase.getSearchName(customer.getCity(), table, columnFrom, columnResult));
+
     }
 
+    /**
+     * Will fill the state ComboBox
+     * */
     public void setStateCombo(ActionEvent e) {
 
         String country = countryCombo.getValue().toString();
         stateCombo.getItems().clear();
 
         switch (country){
-            case "Canada":
-                stateCombo.getItems().addAll(DataBase.getCanada());
-                break;
-            case "United Kingdom":
-                stateCombo.getItems().addAll(DataBase.getUk());
-                break;
-            case "United States":
-                stateCombo.getItems().addAll(DataBase.getUsa());
-                break;
+            case "Canada" -> stateCombo.getItems().addAll(DataBase.getCanada());
+            case "United Kingdom" -> stateCombo.getItems().addAll(DataBase.getUk());
+            case "United States" -> stateCombo.getItems().addAll(DataBase.getUsa());
         }
 
         stateCombo.getSelectionModel().select(0);
     }
 
-    public void saveCustomer(ActionEvent e) {
+
+    /**
+     * This will make sure there is no empty fields
+     * Then will assign all the values
+     * @param e ActionEvent
+     * @throws IOException Failed to go back to the main form or modifying the customer
+     **/
+    public void saveCustomer(ActionEvent e) throws IOException{
+        if(check()) {
+            String name = custNameTxt.getText(), address = custAddressTxt.getText(),
+                    phone = custPhoneTxt.getText(), zip = custZipTxt.getText(),
+                    country = countryCombo.getValue().toString(),
+                    state = stateCombo.getValue().toString();
+
+            Customer customer = new Customer(id, name, address, zip, state, phone);
+            DataBase.updateCustomer(id, customer);
+            Main.callForms(e, "MainForm");
+        }
+
     }
 
+    /**
+     * Checks for empty text fields and logical error
+     * @return If everything is good
+     **/
     private boolean check(){
 
         boolean checked = true;
@@ -114,6 +143,11 @@ public class ModifyCustomer {
 
     }
 
+    /**
+     * This will take you back to the main form
+     * @param e ActionEvent
+     * @throws IOException Failed to go back to the main form
+     **/
     public void cancel(ActionEvent e)throws IOException {
         Main.callForms(e, "MainForm");
     }
