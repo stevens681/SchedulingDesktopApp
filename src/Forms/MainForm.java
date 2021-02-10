@@ -15,6 +15,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javax.swing.*;
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import static javax.swing.JOptionPane.showMessageDialog;
 
 
@@ -50,8 +54,6 @@ public class MainForm {
     @FXML
     public void deleteCustomer(ActionEvent e) {
 
-
-
         Customer customer = custTable.getSelectionModel().getSelectedItem();        //Gets the selected product
 
         if(customer.getAllAppointments().isEmpty()){
@@ -59,8 +61,20 @@ public class MainForm {
                     "Are you sure you want to delete this customer?");
             if(m == JOptionPane.YES_OPTION){
 
+                try {
+                    Statement data = Connect.sendData().createStatement();
+                    String query = "DELETE FROM customers WHERE Customer_ID='"+customer.getId()+"'";
+                    PreparedStatement statement = Connect.sendData().prepareStatement(query);
+                    statement.executeUpdate(query);
+                    data.close();
+
+                }catch (SQLException a) {
+                    showMessageDialog(null,"SQLException: " + a.getMessage());
+
+                }
                 DataBase.deleteCustomer(customer);
-                custTable.setItems(DataBase.getAllCustomers());       //Updates the table
+                custTable.setItems(DataBase.getAllCustomers());
+
             }
         }
         else{

@@ -1,8 +1,6 @@
 package Forms;
 
-import Utilities.Appointment;
-import Utilities.Customer;
-import Utilities.DataBase;
+import Utilities.*;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +16,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javax.swing.*;
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -80,7 +81,44 @@ public class RecordsController {
             case "Add Appointment" -> apptButton(e);
             case "Details" -> detail(e);
             case "Back" -> Main.callForms(e, "MainForm");
+            case "Delete Appointment" -> deleteAppointment(e);
 
+        }
+    }
+
+    /**
+     * This delete a selected appointment
+     * Updates the table view
+     * @param e ActionEvent
+     */
+    @FXML
+    public void deleteAppointment(ActionEvent e) {
+
+        Appointment appointment = custTable.getSelectionModel().getSelectedItem();
+        ObservableList<Contact> contactList;
+        contactList = appointment.getAllContacts();
+        int m = JOptionPane.showConfirmDialog(null,
+                "Are you sure you want to delete this appointment?");
+        if(m == JOptionPane.YES_OPTION){
+
+            try {
+                Statement data = Connect.sendData().createStatement();
+                String query = "DELETE FROM appointments WHERE Appointment_ID='"+appointment.getAptId()+"'";
+                PreparedStatement statement = Connect.sendData().prepareStatement(query);
+                statement.executeUpdate(query);
+                data.close();
+
+            }catch (SQLException a) {
+                showMessageDialog(null,"SQLException: " + a.getMessage());
+
+            }
+            for (Contact c: contactList){
+                DataBase.deleteContact(c);
+            }
+            selectedCustomer.deleteAppointment(appointment);
+            appointmentList.remove(appointment);
+            DataBase.deleteAppointment(appointment);
+            custTable.setItems(appointmentList);
         }
     }
 
@@ -103,7 +141,6 @@ public class RecordsController {
         stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
         stage.setScene(new Scene(parent));
         stage.show();
-
     }
 
     /**
@@ -130,8 +167,6 @@ public class RecordsController {
         else
             showMessageDialog(null, "Please Add a New Appointment", "EMPTY APPOINTMENT",
                     JOptionPane.PLAIN_MESSAGE);
-
-
     }
 
     /**te
@@ -145,6 +180,7 @@ public class RecordsController {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
         DateFormat outFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa z");
         Date date = null;
+
         try {
             date= format.parse(time);
             time = outFormat.format(date);
@@ -153,6 +189,7 @@ public class RecordsController {
         catch (ParseException e){
             e.printStackTrace();
         }
+
         String[] splitTime = time.split(" ", -1);
 
         time = splitTime[1] + " " + splitTime[2] + " " + splitTime[3] ;

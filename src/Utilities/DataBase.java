@@ -7,10 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-
 import static javax.swing.JOptionPane.showMessageDialog;
-
 
 public class DataBase {
 
@@ -184,7 +181,7 @@ public class DataBase {
 
     /**
      * Remove a customer
-     * @param selectedCustomer The selected product
+     * @param selectedCustomer The selected customer
      * @return If the part is deleted
      */
     public static boolean deleteCustomer(Customer selectedCustomer) {
@@ -197,6 +194,35 @@ public class DataBase {
         return false;
     }
 
+    /**
+     * Remove a appointment
+     * @param selectedAppointment The selected appointment
+     * @return If the part is deleted
+     */
+    public static boolean deleteAppointment(Appointment selectedAppointment) {
+        for(Appointment a: allAppointments) {
+            if (a.getAptId() == selectedAppointment.getAptId()) {
+                allAppointments.remove(a);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Remove a contact
+     * @param selectedContact The selected contact
+     * @return If the part is deleted
+     */
+    public static boolean deleteContact(Contact selectedContact) {
+        for(Contact c: allContacts) {
+            if (c.getId() == selectedContact.getId()) {
+                allContacts.remove(c);
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static void pullCustomers(){
         try {
@@ -393,44 +419,26 @@ public class DataBase {
 
         int id=selectedCustomer.getId();
 
-//        boolean exist = true;
-//
-//        for(Customer c : allCustomers){
-//            if(newCustomer.getName().equalsIgnoreCase(c.getName())){
-//                exist =false;
-//
-//            }
-//        }
 
-//        if(exist){
+        try{
+            Statement data = Connect.sendData().createStatement();
 
-            try{
-                Statement data = Connect.sendData().createStatement();
+            String query = "UPDATE customers SET Address='"+address+"', Customer_Name='"+name+
+                    "', Division_ID='"+getSearchID(state, "first_level_divisions", "Division", "Division_ID")+
+                    "', Last_Update='"+java.time.LocalDate.now()+"', Last_Updated_By='"+user+"', Phone='"+phone+"', Postal_Code='"+zip+
+                    "' WHERE Customer_ID='"+id+"'";
 
-                String query = "UPDATE customers SET Address='"+address+"', Customer_Name='"+name+
-                        "', Division_ID='"+getSearchID(state, "first_level_divisions", "Division", "Division_ID")+
-                        "', Last_Update='"+java.time.LocalDate.now()+"', Last_Updated_By='"+user+"', Phone='"+phone+"', Postal_Code='"+zip+
-                        "' WHERE Customer_ID='"+id+"'";
-//
-//                String values = " VALUES ('" + id + "', '"+ address + "', '" +
-//                        java.time.LocalDate.now() + "', '" + user + "', '" + name + "', '" +
-//                        getSearchID(state, "first_level_divisions", "Division", "Division_ID")+"', '"+
-//                        phone + "', '" + zip + "')";
-//
-                PreparedStatement statement = Connect.sendData().prepareStatement(query);
-                statement.executeUpdate(query);
+            PreparedStatement statement = Connect.sendData().prepareStatement(query);
+            statement.executeUpdate(query);
 
-                data.close();
+            data.close();
 
-            }catch (SQLException e){
-                showMessageDialog(null,"Adding the customer SQLException: " + e.getMessage());
-            }
+        }catch (SQLException e){
+            showMessageDialog(null,"Adding the customer SQLException: " + e.getMessage());
+        }
 
-            getAllCustomers().set(index -1, selectedCustomer);
+        getAllCustomers().set(index -1, selectedCustomer);
 
-
-//        else
-//            showMessageDialog(null, "This customer already exists!");
 
     }
 
@@ -462,22 +470,12 @@ public class DataBase {
                 String query = "INSERT INTO appointments (Appointment_ID, Contact_ID, Create_Date, " +
                         "Created_By, Customer_ID, Description, End, Last_Update, Last_Updated_By, " +
                         "Location, Start, Title, Type)";
-                System.out.println("This is the query >"+query);
 
-
-                String values = " VALUES ('"+id+"', '"+contactID+"', '"+
-                        java.time.LocalDate.now()+"', '"+
-                        user+"', '"+
-                        customerID+"', '"+
-                        description+"', '"+
-                        end+"', '"+
-                        java.time.LocalDate.now()+"', '"+
-                        user+"', '"+
-                        location+"', '"+
-                        start+"', '"+
-                        tittle+"', '"+
-                        type+"')";
-                System.out.println("This is the values >"+values);
+                String values = " VALUES ('" + id + "', '" + contactID + "', '" +
+                        java.time.LocalDate.now() + "', '" +
+                        user+"', '" + customerID + "', '" + description + "', '" + end + "', '" +
+                        java.time.LocalDate.now() + "', '" + user + "', '" + location+"', '" +
+                        start + "', '" + tittle+"', '" + type+"')";
 
                 PreparedStatement statement = Connect.sendData().prepareStatement(query+values);
                 statement.executeUpdate();
@@ -519,6 +517,7 @@ public class DataBase {
                 String values = " VALUES ('"+id+"', '" + name+"', '" + email+"')";
 
                 PreparedStatement statement = Connect.sendData().prepareStatement(query+values);
+
                 statement.executeUpdate();
 
                 data.close();
@@ -526,11 +525,8 @@ public class DataBase {
             }catch (SQLException e){
                 showMessageDialog(null,"Adding the contact SQLException: " + e.getMessage());
             }
-
             allContacts.add(newContact);
-
         }
-
     }
 
 

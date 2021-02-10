@@ -48,7 +48,7 @@
                         <Font size="15.0" />
                     </font>
                 </Label>
-                <Button layoutX="150.0" layoutY="432.0" mnemonicParsing="false" onAction="#saveCustomer" text="Add Customer" />
+                <Button layoutX="150.0" layoutY="432.0" mnemonicParsing="false" onAction="#saveCustomer" text="Save Customer" />
                 <Button fx:id="cancelBtn" layoutX="257.0" layoutY="432.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
                 <Label fx:id="lbl" layoutX="30.0" layoutY="466.0" />
             <Label fx:id="custID" layoutX="257.0" layoutY="124.0" />

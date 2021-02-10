@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -21,11 +22,7 @@ import java.util.regex.Pattern;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
-/**
- * This will add an appointment
- * @author Fernando Rosa
- * */
-public class AppointmentForm {
+public class ModifyAppointment {
 
     private final ObservableList<Contact> newContact = FXCollections.observableArrayList();
     private ObservableList<Appointment> addNewAppointment = FXCollections.observableArrayList();
@@ -99,7 +96,7 @@ public class AppointmentForm {
         if(check()){
 
             String appTittle = tittle.getText(), date = startDate.getValue().toString(), description = descriptionTxt.getText(),
-                location = locationTxt.getText(), mail = email.getText(), hour = time.getValue().toString(),
+                    location = locationTxt.getText(), mail = email.getText(), hour = time.getValue().toString(),
                     type = typeOfApp.getValue().toString(), end="";
             int contactId = DataBase.getAllContacts().size()+1;
 
@@ -129,7 +126,7 @@ public class AppointmentForm {
             DataBase.updateCustomer(id, upCustomer);
 
             showMessageDialog(null, "Customer: " + contactName.getText()
-                                +"\nDate: " + date);
+                    +"\nDate: " + date);
 
             Main.callForms(e, "MainForm");
         }
@@ -216,9 +213,9 @@ public class AppointmentForm {
             }
         }
 
-            String[] finalData = data;
+        String[] finalData = data;
 
-            startDate.setDayCellFactory(days -> new DateCell() {
+        startDate.setDayCellFactory(days -> new DateCell() {
 
             @FXML
             public void updateItem(LocalDate date, boolean empty) {
@@ -234,7 +231,7 @@ public class AppointmentForm {
 
                 for(int i = 0; i< finalData.length; i++){
                     String test = finalData[i];
-                    DateTimeFormatter  formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     LocalDate indate = LocalDate.parse(test, formatter);
                     if(date.equals(indate)){
                         setDisable(date.equals(indate));
