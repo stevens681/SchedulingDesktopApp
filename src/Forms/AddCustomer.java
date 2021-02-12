@@ -4,7 +4,6 @@ import Utilities.Connect;
 import Utilities.Customer;
 import Utilities.DataBase;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -19,8 +18,6 @@ import java.util.regex.Pattern;
  * */
 public class AddCustomer {
 
-    @FXML
-    private Button cancelBtn;
     @FXML
     private TextField custNameTxt;
     @FXML

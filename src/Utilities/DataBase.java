@@ -217,7 +217,19 @@ public class DataBase {
     public static boolean deleteContact(Contact selectedContact) {
         for(Contact c: allContacts) {
             if (c.getId() == selectedContact.getId()) {
-                allContacts.remove(c);
+                try {
+                    Statement data = Connect.sendData().createStatement();
+                    String query = "DELETE FROM contacts WHERE Contact_ID='"+selectedContact.getId()+"'";
+                    PreparedStatement statement = Connect.sendData().prepareStatement(query);
+                    statement.executeUpdate(query);
+                    data.close();
+                    allContacts.remove(c);
+
+                }catch (SQLException a) {
+                    showMessageDialog(null,"SQLException: " + a.getMessage());
+
+                }
+
                 return true;
             }
         }
@@ -299,71 +311,6 @@ public class DataBase {
         }
     }
 
-    public static void testSql(){
-//        String table = "first_level_divisions", columnFrom= "Division", columnResult ="Division_ID";
-//
-//        try {
-//            System.out.println("Test");
-//            Statement data = Connect.sendData().createStatement();
-//            String query = "SELECT * FROM appointments";
-//            ResultSet results = data.executeQuery(query);
-//            while(results.next()) {
-//                String t = results.getString("Location");
-//                System.out.println(t+"Inside the loop");
-////                if(!results.next()){
-////                    System.out.println("Creator: "+
-////                            results.getString("Created_By")+
-////                            "Name: "+ results.getString("Customer_Name")+
-////                            "Division ID: "+results.getString("Division_ID")+
-////                            "Date: "+results.getString("Create_Date"));
-////                }
-//
-//           }
-//            data.close();
-//
-//        } catch (SQLException e) {
-//            showMessageDialog(null,"SQLException: " + e.getMessage());
-//
-//        }
-
-//        try {
-//            Statement data = Connect.sendData().createStatement();
-//            String query = "SELECT * FROM contacts";
-//            ResultSet results = data.executeQuery(query);
-//            while(results.next()) {
-//                Contact contact = new Contact(results.getInt("Contact_ID"),
-//                        results.getString("Contact_Name"),
-//                        results.getString("Email"));
-//
-////                allContacts.add(contact);
-//                System.out.println(contact.getId());
-//            }
-//            data.close();
-//
-//        } catch (SQLException e) {
-//            showMessageDialog(null,"SQLException: " + e.getMessage());
-//
-//        }
-//
-//        try{
-//            Statement data = Connect.sendData().createStatement();
-//
-//            String query = "INSERT INTO contacts (Contact_ID, Contact_Name, Email)";
-//
-//            String values = " VALUES ('"+3+"', 'Customer One', 'cone@test.com')";
-//
-//            PreparedStatement statement = Connect.sendData().prepareStatement(query+values);
-//            statement.executeUpdate();
-//
-//            data.close();
-//
-//        }catch (SQLException e){
-//            showMessageDialog(null,"Adding the contact SQLException: " + e.getMessage());
-//        }
-
-
-    }
-
     public static void addCustomer(Customer newCustomer){
 
         String name = newCustomer.getName(), address = newCustomer.getAddress(),
@@ -411,7 +358,7 @@ public class DataBase {
             showMessageDialog(null, "This customer already exists!");
     }
 
-    public static void updateCustomer(int index, Customer selectedCustomer){
+    public static void updateCustomer(int index, Customer selectedCustomer, boolean isAppointment){
 
         String name = selectedCustomer.getName(), address = selectedCustomer.getAddress(),
                 phone = selectedCustomer.getPhone(), zip = selectedCustomer.getZipCode(),
@@ -420,13 +367,60 @@ public class DataBase {
         int id=selectedCustomer.getId();
 
 
+        if(!isAppointment) {
+            try{
+                Statement data = Connect.sendData().createStatement();
+
+                String query = "UPDATE customers SET Address='"+address+"', Customer_Name='"+name+
+                        "', Division_ID='"+getSearchID(state, "first_level_divisions", "Division", "Division_ID")+
+                        "', Last_Update='"+java.time.LocalDate.now()+"', Last_Updated_By='"+user+"', Phone='"+phone+"', Postal_Code='"+zip+
+                        "' WHERE Customer_ID='"+id+"'";
+
+                PreparedStatement statement = Connect.sendData().prepareStatement(query);
+                statement.executeUpdate(query);
+
+                data.close();
+
+            }catch (SQLException e){
+                showMessageDialog(null,"Adding the customer SQLException: " + e.getMessage());
+            }
+        }
+
+        getAllCustomers().set(index -1, selectedCustomer);
+
+
+    }
+
+    public static void updateAppointment(int index, Appointment selectedAppointment, int contactIndex, Contact selectedContact,
+                                         int customerIndex){
+
+        String contactName = selectedContact.getName(), email = selectedContact.getEmail(),
+                description = selectedAppointment.getDescription(), end = selectedAppointment.getEnd(),
+                location = selectedAppointment.getLocation(), start = selectedAppointment.getStart(),
+                title = selectedAppointment.getTittle(), type = selectedAppointment.getType();
+
         try{
             Statement data = Connect.sendData().createStatement();
 
-            String query = "UPDATE customers SET Address='"+address+"', Customer_Name='"+name+
-                    "', Division_ID='"+getSearchID(state, "first_level_divisions", "Division", "Division_ID")+
-                    "', Last_Update='"+java.time.LocalDate.now()+"', Last_Updated_By='"+user+"', Phone='"+phone+"', Postal_Code='"+zip+
-                    "' WHERE Customer_ID='"+id+"'";
+            String query = "UPDATE contacts SET Contact_Name='"+contactName+"', Email='"+email+"' WHERE Contact_ID='"+contactIndex+"'";
+
+            PreparedStatement statement = Connect.sendData().prepareStatement(query);
+            statement.executeUpdate(query);
+
+            data.close();
+
+        }catch (SQLException e){
+            showMessageDialog(null,"Adding the customer SQLException: " + e.getMessage());
+
+        }
+
+        try{
+            Statement data = Connect.sendData().createStatement();
+
+            String query = "UPDATE appointments SET Description='"+description+"', End='" +end+"', "+
+                    "Last_Update='"+java.time.LocalDate.now()+"', Last_Updated_By='"+user+"', "+
+                    "Location='"+location+"', Start='"+start+"',  Title='"+title+"', Type='"+type+"'"+
+                    " WHERE Appointment_ID='"+index+"'";
 
             PreparedStatement statement = Connect.sendData().prepareStatement(query);
             statement.executeUpdate(query);
@@ -437,9 +431,8 @@ public class DataBase {
             showMessageDialog(null,"Adding the customer SQLException: " + e.getMessage());
         }
 
-        getAllCustomers().set(index -1, selectedCustomer);
-
-
+        getAllContacts().set(contactIndex-1, selectedContact);
+        getAllAppointments().set(index -1, selectedAppointment);
     }
 
     public static void addAppointment(Appointment newAppointment, int contactID, int customerID){
@@ -471,8 +464,7 @@ public class DataBase {
                         "Created_By, Customer_ID, Description, End, Last_Update, Last_Updated_By, " +
                         "Location, Start, Title, Type)";
 
-                String values = " VALUES ('" + id + "', '" + contactID + "', '" +
-                        java.time.LocalDate.now() + "', '" +
+                String values = " VALUES ('" + id + "', '" + contactID + "', '" + java.time.LocalDate.now() + "', '" +
                         user+"', '" + customerID + "', '" + description + "', '" + end + "', '" +
                         java.time.LocalDate.now() + "', '" + user + "', '" + location+"', '" +
                         start + "', '" + tittle+"', '" + type+"')";
@@ -486,6 +478,8 @@ public class DataBase {
                 showMessageDialog(null,"Adding the appointment SQLException: " + e.getMessage());
             }
             allAppointments.add(newAppointment);
+
+
         }
         else
             showMessageDialog(null, "This  already exists!");

@@ -17,7 +17,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * This is the main class of the project
+ * @author Fernando Rosa
+ * */
 public class Main extends Application {
+
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -28,6 +33,12 @@ public class Main extends Application {
     }
 
 
+    /**
+     * Calls the different form and sets the size of their windows
+     * @param actionEvent  ActionEvent
+     * @param loadForm the form that it will be loaded
+     * @throws IOException if the form has an error
+     * */
     public static void callForms(ActionEvent actionEvent, String loadForm) throws IOException {
 
         int w = 0, h = 0;
@@ -96,6 +107,9 @@ public class Main extends Application {
         return time;
     }
 
+    /**
+     * This will get the system timezone
+     * */
     public static String timeZone(){
         String zone ="";
         TimeZone timeZone = TimeZone.getDefault();
@@ -104,6 +118,10 @@ public class Main extends Application {
         return zone;
     }
 
+    /**
+     * Convert to the system timezone
+     * @param time the time to be converted
+     * */
     public static String convertZone( String time){
 
         if(time.contains(".")){
@@ -138,36 +156,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
 
-
-//        Customer cu = new Customer(1, "jo", "12 dsdf", "02286", "monte", "323");
-//        Customer ci = new Customer(2, "johhgdhgfhgd kjjkhdjs", "13 dsdf", "02286", "monte dsfdf", "323 24323");
-//        DataBase.addCustomer(cu);
-//        DataBase.addCustomer(ci);
-
-//        Appointment a = new Appointment(1, "1 qw", "2020-12-15 04:00", "2020-12-07", "1", "in", "12 dfsdf");
-//        Appointment b = new Appointment(2, "1 qw", "2020-12-15 05:00", "2020-12-08", "1", "in", "12 dfsdf");
-//        Appointment c = new Appointment(3, "1 qw", "2020-12-14", "2020-12-09", "1", "in", "12 dfsdf");
-//        Appointment d = new Appointment(4, "1 qw", "2020-12-14", "2020-12-10", "1", "in", "12 dfsdf");
-//        Appointment e = new Appointment(5, "1 qw", "2020-12-16", "2020-12-11", "1", "in", "12 dfsdf");
-//        Appointment f = new Appointment(6, "1 qw", "2020-12-02", "2020-12-12", "1", "in", "12 dfsdf");
-//
-//        DataBase.addAppointment(a);
-//        DataBase.addAppointment(b);
-//        DataBase.addAppointment(c);
-//        DataBase.addAppointment(d);
-//        DataBase.addAppointment(e);
-//        DataBase.addAppointment(f);
-
-        System.out.println("The whole time -->"+time());
-        System.out.println("TimeZone -->"+timeZone());
-        System.out.println("Converted zone -->"+convertZone(time()));
-        String[] segments = time().split(" ", -1);
-        System.out.println("Converted zone -->"+convertZone("0000-00-00 20:00:00 PST"));
-        System.out.println("segment  -->" + segments[1]);
-
-        //System.out.println("\n\nThis is split "+ localTimeZone("08:00:00"));
         Connect.connecting();
-        //Connect.createUser();
         launch(args);
     }
 }

@@ -9,7 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -19,12 +18,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import static javax.swing.JOptionPane.showMessageDialog;
 
+/**
+ * This will modify an existing appointment
+ * @author Fernando Rosa
+ * */
 public class ModifyAppointment {
 
-    private final ObservableList<Contact> newContact = FXCollections.observableArrayList();
+    private ObservableList<Contact> newContact = FXCollections.observableArrayList();
     private ObservableList<Appointment> addNewAppointment = FXCollections.observableArrayList();
     private Appointment newAppt;
     @FXML
@@ -46,11 +48,14 @@ public class ModifyAppointment {
     @FXML
     private Label lbl;
 
-    int appId = DataBase.getAllAppointments().size()+1;
-    public int id;
+    int appId;
+    public int id, contactId;
     public String name, address, zipCode, city, phone;
 
-    public void customer( Customer customer){
+    /**
+     * This will fill all the elements needed to modify the selected appointment
+     * */
+    public void customer(Customer customer, Appointment appointment){
         contactName.setText(customer.getName());
         name = customer.getName();
         phone = customer.getPhone();
@@ -59,6 +64,29 @@ public class ModifyAppointment {
         city = customer.getCity();
         id = customer.getId();
         this.addNewAppointment = customer.getAllAppointments();
+        tittle.setText(appointment.getTittle());
+        descriptionTxt.setText(appointment.getDescription());
+        locationTxt.setText(appointment.getLocation());
+        typeOfApp.getSelectionModel().select(appointment.getType());
+        appId = appointment.getAptId();
+
+        String[] splitStart = appointment.getStart().split(" ", -1);
+        startDate.setValue(LocalDate.parse(splitStart[0]));
+        getTime();
+        if(appointment.getStart().contains(".")){
+            time.getItems().add(splitStart[1].substring(0, splitStart[1].indexOf(".")));
+            time.getSelectionModel().select(splitStart[1].substring(0, splitStart[1].indexOf(".")));
+        }
+        else{
+            time.getItems().add(splitStart[1]);
+            time.getSelectionModel().select(splitStart[1]);
+        }
+
+
+        for(Contact c: appointment.getAllContacts()){
+            contactId = c.getId();
+            email.setText(c.getEmail());
+        }
 
     }
 
@@ -98,7 +126,7 @@ public class ModifyAppointment {
             String appTittle = tittle.getText(), date = startDate.getValue().toString(), description = descriptionTxt.getText(),
                     location = locationTxt.getText(), mail = email.getText(), hour = time.getValue().toString(),
                     type = typeOfApp.getValue().toString(), end="";
-            int contactId = DataBase.getAllContacts().size()+1;
+
 
             switch (hour){
                 case "08:00:00" -> end = "08:45:00";
@@ -112,18 +140,19 @@ public class ModifyAppointment {
 
             newContact.add(contact);
 
-            DataBase.addContact(contact);
-
             newAppt = new Appointment(newContact, appId, description, date+" "+hour,
                     date+" "+end, appTittle,type, location);
 
-            addNewAppointment.add(newAppt);
+            for(Appointment a: addNewAppointment){
+                if(a.getAptId() == appId)
+                    addNewAppointment.set(appId-1, newAppt);
+            }
 
             upCustomer = new Customer(addNewAppointment, id, name, address, zipCode, city, phone);
 
-            DataBase.addAppointment(newAppt, contactId, id);
+            DataBase.updateAppointment(appId, newAppt, contactId, contact, id);
 
-            DataBase.updateCustomer(id, upCustomer);
+            DataBase.updateCustomer(id, upCustomer, true);
 
             showMessageDialog(null, "Customer: " + contactName.getText()
                     +"\nDate: " + date);
@@ -165,8 +194,12 @@ public class ModifyAppointment {
 
 
         for(Appointment appointment: DataBase.getAllAppointments()){
+            String remove;
+            if(appointment.getStart().contains("."))
+                remove = appointment.getStart().substring(0, appointment.getStart().indexOf("."));
+            else
+                remove = appointment.getStart();
 
-            String remove = appointment.getStart().substring(0, appointment.getStart().indexOf("."));
             if(appointment.getStart().contains(" ")){
                 if(splitDate(remove).equals(startDate.getValue().toString())){
                     timeToSet.remove(splitTime(remove));

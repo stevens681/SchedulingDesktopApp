@@ -96,7 +96,7 @@ public class ModifyCustomer {
                     state = stateCombo.getValue().toString();
 
             Customer customer = new Customer(id, name, address, zip, state, phone);
-            DataBase.updateCustomer(id, customer);
+            DataBase.updateCustomer(id, customer, false);
             Main.callForms(e, "MainForm");
         }
 

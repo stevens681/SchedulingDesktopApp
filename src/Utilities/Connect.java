@@ -17,6 +17,9 @@ public class Connect {
 
     public Connect(){}
 
+    /**
+     * First connection to the database
+     * */
     public static void connecting(){
 
         try {
@@ -31,10 +34,16 @@ public class Connect {
         }
     }
 
+    /**
+     * Sends data to the database
+     * */
     public static Connection sendData(){
         return dataDB;
     }
 
+    /**
+     * Gets system location
+     * */
     public static String getCountry(){
 
         Locale locale = Locale.getDefault();

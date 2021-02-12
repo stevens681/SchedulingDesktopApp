@@ -113,6 +113,17 @@ public class RecordsController {
 
             }
             for (Contact c: contactList){
+                try {
+                    Statement data = Connect.sendData().createStatement();
+                    String query = "DELETE FROM contacts WHERE Contact_ID='"+c.getId()+"'";
+                    PreparedStatement statement = Connect.sendData().prepareStatement(query);
+                    statement.executeUpdate(query);
+                    data.close();
+
+                }catch (SQLException a) {
+                    showMessageDialog(null,"SQLException: " + a.getMessage());
+
+                }
                 DataBase.deleteContact(c);
             }
             selectedCustomer.deleteAppointment(appointment);
@@ -144,6 +155,33 @@ public class RecordsController {
     }
 
     /**
+     * Opens the modify appointment form
+     * @param e ActionEvent
+     * @throws IOException failed to do the action
+     * */
+    @FXML
+    public void modifyButton(ActionEvent e) throws IOException {
+
+        Appointment appointment = custTable.getSelectionModel().getSelectedItem();
+        Parent parent;
+        Stage stage;
+
+        if(appointment == null)
+            showMessageDialog(null, "Please select an appointment");
+        else {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ModifyAppointment.fxml"));
+            loader.load();
+            ModifyAppointment selected = loader.getController();
+            selected.customer(selectedCustomer, custTable.getSelectionModel().getSelectedItem());
+            parent = loader.getRoot();
+            stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(parent));
+            stage.show();
+        }
+
+    }
+
+    /**
      * The detail button
      * @param e ActionEvent
      * @throws IOException Check for exception
@@ -169,7 +207,7 @@ public class RecordsController {
                     JOptionPane.PLAIN_MESSAGE);
     }
 
-    /**te
+    /**
      * Provides the local timezone
      * @param time The UTC times
      * @return Local time

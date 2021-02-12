@@ -111,7 +111,11 @@ public class MainForm {
 
     }
 
-
+    /**
+     * Calls the modification form to modify the selected customer
+     * @param e ActionEvent
+     * @throws IOException if the form does not load
+     * */
     @FXML
     public void modCustomer(ActionEvent e) throws IOException {
 
@@ -135,6 +139,12 @@ public class MainForm {
         }
     }
 
+    /**
+     * Calls the customer records
+     * to add appointments and see customers appointments
+     * @param e ActionEvent
+     * @throws IOException if the form does not load
+     * */
     @FXML
     public void records(ActionEvent e) throws IOException {
         Customer customer =  custTable.getSelectionModel().getSelectedItem();

@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
@@ -53,7 +52,10 @@ public class AppointmentForm {
     public int id;
     public String name, address, zipCode, city, phone;
 
-    public void customer( Customer customer){
+    /**
+     * This will fill the customer fields in this class
+     * */
+    public void customer(Customer customer){
         contactName.setText(customer.getName());
         name = customer.getName();
         phone = customer.getPhone();
@@ -126,7 +128,7 @@ public class AppointmentForm {
 
             DataBase.addAppointment(newAppt, contactId, id);
 
-            DataBase.updateCustomer(id, upCustomer);
+            DataBase.updateCustomer(id, upCustomer, true);
 
             showMessageDialog(null, "Customer: " + contactName.getText()
                                 +"\nDate: " + date);
