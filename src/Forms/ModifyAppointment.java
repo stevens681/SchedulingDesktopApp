@@ -150,7 +150,7 @@ public class ModifyAppointment {
 
             upCustomer = new Customer(addNewAppointment, id, name, address, zipCode, city, phone);
 
-            DataBase.updateAppointment(appId, newAppt, contactId, contact, id);
+            DataBase.updateAppointment(appId, newAppt, contactId, contact);
 
             DataBase.updateCustomer(id, upCustomer, true);
 

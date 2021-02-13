@@ -15,7 +15,7 @@
             <TableView fx:id="custTable" layoutX="50.0" layoutY="220.0" prefHeight="280.0" prefWidth="500.0" />
             <Button layoutX="50.0" layoutY="522.0" mnemonicParsing="false" onAction="#apptButton" text="Add Appointment" />
             <Button layoutX="425.0" layoutY="522.0" mnemonicParsing="false" onAction="#button" text="Delete Appointment" />
-            <Button layoutX="50.0" layoutY="561.0" mnemonicParsing="false" text="Modify Appointment" />
+            <Button layoutX="50.0" layoutY="561.0" mnemonicParsing="false" onAction="#modifyButton" text="Modify Appointment" />
             <Button layoutX="279.0" layoutY="561.0" mnemonicParsing="false" onAction="#button" text="Back" />
             <Label fx:id="nameLabel" layoutX="34.0" layoutY="67.0">
                <font>
