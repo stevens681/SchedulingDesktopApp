@@ -1,6 +1,8 @@
 package Forms;
 
+import Utilities.Appointment;
 import Utilities.Connect;
+import Utilities.DataBase;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -8,21 +10,22 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.*;
+import java.util.Timer;
 
 /**
  * This is the main class of the project
  * @author Fernando Rosa
  * */
 public class Main extends Application {
-
+    public static boolean alarmFlag = true, todayAppointments = false;;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -122,7 +125,7 @@ public class Main extends Application {
      * Convert to the system timezone
      * @param time the time to be converted
      * */
-    public static String convertZone( String time){
+    public static String convertZone(String time){
 
         if(time.contains(".")){
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS z");
@@ -153,10 +156,84 @@ public class Main extends Application {
 
     }
 
+    /**
+     * This will display an alarm 15 minutes before the appointment
+     * */
+    public static void alarm() { 
+
+
+        String msg ="There are appointments today at: ";
+        for (Appointment a:  DataBase.getAllAppointments()){
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+
+            try {
+                Date date, nowDate;
+
+                date = dateFormat.parse(convertZone(a.getStart()+" UTC"));
+                Calendar c = Calendar.getInstance();
+                c.setTime(date);
+                c.add(Calendar.MINUTE, -15);
+                int hour = c.get(Calendar.HOUR_OF_DAY), min = c.get(Calendar.MINUTE);
+
+                nowDate = dateFormat.parse(convertZone(time()));
+                c.setTime(nowDate);
+                int nowHour = c.get(Calendar.HOUR_OF_DAY), nowMin = c.get(Calendar.MINUTE);
+
+                if(splitDate(convertZone(time()), 0).equals(splitDate(convertZone(a.getStart()+" UTC"), 0))){
+                    todayAppointments = true;
+                    msg += "\n" +hour ;
+
+                    if(hour == nowHour && nowMin >= min){
+                        String aptMsg = "Tittle: " + a.getTittle() + "\nAt: "+ convertZone(a.getStart()+" UTC");
+                        Object[] options = {"Remind me in a minute",
+                                "Dismiss"};
+                        int n = JOptionPane.showOptionDialog(null,
+                                aptMsg, "Alarm", JOptionPane.YES_NO_OPTION,
+                                JOptionPane.WARNING_MESSAGE,null, options, options[1]);
+
+                        if(n == 1)
+                            alarmFlag = false;
+                    }
+                }
+
+            }
+            catch (ParseException parseException){
+                System.out.println(parseException);
+
+            }
+
+            if(todayAppointments){
+                Object[] options = {"Remind me in a minute",
+                        "Dismiss"};
+                int n = JOptionPane.showOptionDialog(null,
+                        msg, "Alarm", JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE,null, options, options[1]);
+
+                if(n == 1)
+                    todayAppointments = false;
+            }
+        }
+    }
+
+    public static String splitDate(String appointment, int index){
+        String[] date = appointment.split(" ");
+        return date[index];
+    }
 
     public static void main(String[] args) {
-
         Connect.connecting();
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if(alarmFlag)
+                    alarm();
+
+            }
+        }, 0, 60000);
+
         launch(args);
+        timer.cancel();//stop the timer
     }
 }

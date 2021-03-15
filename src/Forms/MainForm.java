@@ -39,8 +39,7 @@ public class MainForm {
         switch (((Button) e.getSource()).getText()) {
             case "Add a New Customer" -> Main.callForms(e, "addCustomer");
             case "Modify Customer" -> modCustomer(e);
-            case "Customer Records" -> Main.callForms(e, "Records");
-            case "Log" -> Main.callForms(e, "log");
+            case "View/Add Appointment" -> Main.callForms(e, "Records");
             case "Delete Customer" -> deleteCustomer(e);
         }
 

@@ -54,7 +54,7 @@ public class DataBase {
             }
         }
         catch (SQLException e){
-            showMessageDialog(null,"SQLException: " + e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
         }
         return ok;
     }
@@ -80,7 +80,7 @@ public class DataBase {
             data.close();
 
         } catch (SQLException e) {
-            showMessageDialog(null,"SQLException: " + e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
 
         }
     }
@@ -107,7 +107,7 @@ public class DataBase {
             data.close();
 
         } catch (SQLException e) {
-            showMessageDialog(null,"SQLException: " + e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
         }
     }
 
@@ -138,7 +138,7 @@ public class DataBase {
             data.close();
 
         } catch (SQLException e) {
-            showMessageDialog(null,"SQLException: " + e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
         }
         return id;
     }
@@ -168,7 +168,7 @@ public class DataBase {
             data.close();
 
         } catch (SQLException e) {
-            showMessageDialog(null,"SQLException: " + e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
 
         }
         return idToName;
@@ -201,7 +201,7 @@ public class DataBase {
             data.close();
 
         } catch (SQLException e) {
-            showMessageDialog(null,"SQLException: " + e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
         }
         return id;
     }
@@ -253,7 +253,7 @@ public class DataBase {
                     allContacts.remove(c);
 
                 }catch (SQLException a) {
-                    showMessageDialog(null,"SQLException: " + a.getMessage());
+                    System.out.println("SQLException: " + a.getMessage());
 
                 }
                 return true;
@@ -280,7 +280,7 @@ public class DataBase {
             data.close();
 
         } catch (SQLException e) {
-            showMessageDialog(null,"SQLException: " + e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
             
         }
     }
@@ -310,7 +310,7 @@ public class DataBase {
             data.close();
 
         } catch (SQLException e) {
-            showMessageDialog(null,"SQLException: " + e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
         }
     }
 
@@ -573,6 +573,7 @@ public class DataBase {
             allContacts.add(newContact);
         }
     }
+
 
     public static ObservableList<Customer>getAllCustomers(){return allCustomers;}
     public static ObservableList<Contact>getAllContacts(){return allContacts;}
