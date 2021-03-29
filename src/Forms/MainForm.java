@@ -1,18 +1,22 @@
 package Forms;
 
 import Utilities.*;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+
 import javax.swing.*;
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -35,14 +39,12 @@ public class MainForm {
      * */
     @FXML
     public void button(ActionEvent e)throws IOException {
-
         switch (((Button) e.getSource()).getText()) {
             case "Add a New Customer" -> Main.callForms(e, "addCustomer");
             case "Modify Customer" -> modCustomer(e);
             case "View/Add Appointment" -> Main.callForms(e, "Records");
             case "Delete Customer" -> deleteCustomer(e);
         }
-
     }
 
     /**
@@ -53,8 +55,7 @@ public class MainForm {
     @FXML
     public void deleteCustomer(ActionEvent e) {
 
-        Customer customer = custTable.getSelectionModel().getSelectedItem();        //Gets the selected product
-
+        Customer customer = custTable.getSelectionModel().getSelectedItem();
         if(customer.getAllAppointments().isEmpty()){
             int m = JOptionPane.showConfirmDialog(null,
                     "Are you sure you want to delete this customer?");
@@ -88,26 +89,44 @@ public class MainForm {
      * */
     public void colCreator(String tbls) {
 
-        String[] lblCustomer = {"ID", "Customer Name"};
-        String[] areas = {"id", "name"};
+        String[] lblCustomer = {"ID", "Customer Name", "City"};
+        String[] areas = {"id", "name", "city"};
         int colWidth;
 
         if (tbls.equalsIgnoreCase("customer")) {
             custTable.setItems(DataBase.getAllCustomers());
 
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 3; i++) {
                 if (lblCustomer[i].equals("ID"))
                     colWidth = 50;
                 else
-                    colWidth = 450;
+                    colWidth = 225;
+
 
                 TableColumn column = new TableColumn(lblCustomer[i]);
-                column.setCellValueFactory(new PropertyValueFactory<Customer, String>(areas[i]));
+                if(areas[i] == "city") {
+                    ObservableList<String> cities = FXCollections.observableArrayList();
+//                    cities = DataBase.getUsa();
+
+                    cities.addAll(DataBase.getCanada());
+                    System.out.println(cities);
+                    for (String s: cities){
+                        System.out.println(DataBase.getUk());
+                         System.out.println(DataBase.getUk());
+                        if(DataBase.getUsa().equals(s))
+                            System.out.println("cities");
+                    }
+                    //                    System.out.println("This  is working" + areas[i]);
+//                    column.setCellValueFactory(new PropertyValueFactory<Customer, String>(areas[i]));
+                    //column.setCellValueFactory(TextFieldTableCell.<String>forTableColumn());
+
+                }
+                else
+                    column.setCellValueFactory(new PropertyValueFactory<Customer, String>(areas[i]));
                 column.setMinWidth(colWidth);
                 custTable.getColumns().addAll(column);
             }
         }
-
     }
 
     /**

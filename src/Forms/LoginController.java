@@ -8,6 +8,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import java.io.IOException;
+import java.time.ZoneId;
 import java.util.Locale;
 
 
@@ -57,7 +58,6 @@ public class LoginController {
 
             Main.log("Username: " + username + " Logged in");
 
-//            DataBase.testSql();
             Main.callForms(e, "MainForm");
         }
         else {
@@ -122,9 +122,10 @@ public class LoginController {
     public void location(){
 
         Locale user = Locale.getDefault();
-
         String location = user.toString();
         String labels = "";
+        ZoneId z = ZoneId.systemDefault();
+        String s = z.getId();
 
         if(location.startsWith("en")) {
             labels += "English";
@@ -150,7 +151,7 @@ public class LoginController {
                 lan = true;
             }
         }
-        errorLbl.setText(labels);
+        errorLbl.setText(s + "\n" +labels);
     }
 
     /**
