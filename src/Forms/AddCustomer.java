@@ -130,7 +130,6 @@ public class AddCustomer {
      * */
     public void initialize(){
         lbl.setText(DataBase.getUser().toUpperCase());
-        DataBase.pullCountries();
         countryCombo.getItems().addAll(DataBase.getAllCountries());
         countryCombo.getSelectionModel().select(Connect.getCountry());
         setStateCombo();

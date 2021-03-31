@@ -52,7 +52,7 @@ public class Main extends Application {
                 w = 600;
                 h = 600;
             }
-            case "addCustomer", "ModifyCustomer" -> {
+            case "addCustomer", "ModifyCustomer", "Report" -> {
                 w = 400;
                 h = 600;
             }

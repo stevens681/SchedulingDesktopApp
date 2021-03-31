@@ -1,7 +1,8 @@
 package Forms;
 
-import Utilities.*;
-import javafx.beans.value.ObservableValue;
+import Utilities.Connect;
+import Utilities.Customer;
+import Utilities.DataBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,15 +12,13 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -32,6 +31,15 @@ public class MainForm {
     private Label user;
     @FXML
     private TableView<Customer> custTable;
+    @FXML
+    private RadioButton radioUSA;
+    @FXML
+    private RadioButton radioCA;
+    @FXML
+    private RadioButton radioUK;
+    private static final ObservableList<String> canadaID = FXCollections.observableArrayList();
+    private static final ObservableList<String> ukID = FXCollections.observableArrayList();
+    private static final ObservableList<String> usaID = FXCollections.observableArrayList();
 
     /**
      * The handler of the buttons
@@ -41,12 +49,38 @@ public class MainForm {
     public void button(ActionEvent e)throws IOException {
         switch (((Button) e.getSource()).getText()) {
             case "Add a New Customer" -> Main.callForms(e, "addCustomer");
-            case "Modify Customer" -> modCustomer(e);
+            case "Scheduling" -> modCustomer(e);
             case "View/Add Appointment" -> Main.callForms(e, "Records");
             case "Delete Customer" -> deleteCustomer(e);
+            case "Report" -> Main.callForms(e, "Report");
         }
     }
 
+    /**
+     * Pull the states from the database
+     * */
+    public static void fillStatesID(){
+
+        try {
+            Statement data = Connect.sendData().createStatement();
+            String query = "SELECT * FROM first_level_divisions";
+            ResultSet results = data.executeQuery(query);
+
+            while(results.next()) {
+
+                String state = results.getString("Division_ID");
+                switch (results.getInt("COUNTRY_ID")) {
+                    case 38 -> canadaID.add(state);
+                    case 230 -> ukID.add(state);
+                    case 231 -> usaID.add(state);
+                }
+            }
+            data.close();
+
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+        }
+    }
     /**
      * This delete a selected customer
      * Updates the table view
@@ -89,40 +123,23 @@ public class MainForm {
      * */
     public void colCreator(String tbls) {
 
-        String[] lblCustomer = {"ID", "Customer Name", "City"};
-        String[] areas = {"id", "name", "city"};
+        String[] lblCustomer = {"ID", "Customer Name"};
+        String[] areas = {"id", "name"};
         int colWidth;
 
         if (tbls.equalsIgnoreCase("customer")) {
             custTable.setItems(DataBase.getAllCustomers());
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 2; i++) {
                 if (lblCustomer[i].equals("ID"))
                     colWidth = 50;
                 else
-                    colWidth = 225;
+                    colWidth = 450;
 
 
                 TableColumn column = new TableColumn(lblCustomer[i]);
-                if(areas[i] == "city") {
-                    ObservableList<String> cities = FXCollections.observableArrayList();
-//                    cities = DataBase.getUsa();
 
-                    cities.addAll(DataBase.getCanada());
-                    System.out.println(cities);
-                    for (String s: cities){
-                        System.out.println(DataBase.getUk());
-                         System.out.println(DataBase.getUk());
-                        if(DataBase.getUsa().equals(s))
-                            System.out.println("cities");
-                    }
-                    //                    System.out.println("This  is working" + areas[i]);
-//                    column.setCellValueFactory(new PropertyValueFactory<Customer, String>(areas[i]));
-                    //column.setCellValueFactory(TextFieldTableCell.<String>forTableColumn());
-
-                }
-                else
-                    column.setCellValueFactory(new PropertyValueFactory<Customer, String>(areas[i]));
+                column.setCellValueFactory(new PropertyValueFactory<Customer, String>(areas[i]));
                 column.setMinWidth(colWidth);
                 custTable.getColumns().addAll(column);
             }
@@ -184,6 +201,47 @@ public class MainForm {
 
         }
     }
+    public void radioButtons(ActionEvent e){
+
+        ObservableList<Customer> byContries = FXCollections.observableArrayList();
+
+        if(radioUSA.isSelected()){
+            for(Customer customer: DataBase.getAllCustomers()){
+                for(String s: usaID){
+                    if(customer.getCity().equals(s)){
+                        byContries.add(customer);
+                        custTable.setItems(byContries);
+                    }
+
+                }
+            }
+        }
+        if(radioUK.isSelected()){
+            for(Customer customer: DataBase.getAllCustomers()){
+                for(String s: ukID) {
+                    if (customer.getCity().equals(s)) {
+                        byContries.add(customer);
+                        custTable.setItems(byContries);
+                    }
+
+                }
+            }
+        }
+        if(radioCA.isSelected()){
+            for(Customer customer: DataBase.getAllCustomers()) {
+                for (String s: canadaID) {
+                    if (customer.getCity().equals(s)) {
+                        byContries.add(customer);
+                        custTable.setItems(byContries);
+                    }
+
+                }
+            }
+        }
+        if(!radioCA.isSelected() && !radioUK.isSelected() && !radioUSA.isSelected()){
+            custTable.setItems(DataBase.getAllCustomers());
+        }
+    }
 
     /**
      * Initializes the form.
@@ -193,5 +251,8 @@ public class MainForm {
 
         user.setText(DataBase.getUser().toUpperCase() + " "+ Connect.getCountry());
         colCreator("customer");
+        DataBase.pullCountries();
+        fillStatesID();
+
     }
 }

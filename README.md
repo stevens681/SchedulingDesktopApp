@@ -28,7 +28,7 @@ After logged in at the screen you can add costumers, modify the selected custome
 or delete a customer(to delete the customer all the appointments belonging to the customer need to be deleted first).
 
 
-![img.png](img.png)
+![img_9.png](img_9.png)
 
 
 Adding a new customer all the information need to be added properly then click "Add Customer".
@@ -56,3 +56,7 @@ Modifying an existing appointment, the application prepopulate the appointment's
 Appointment's details
 
 ![img_7.png](img_7.png)
+
+Report
+
+![img_8.png](img_8.png)

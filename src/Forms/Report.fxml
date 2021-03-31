@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Forms.Report">
+   <children>
+      <Pane prefHeight="600.0" prefWidth="400.0">
+         <children>
+             <Label layoutX="157.0" layoutY="14.0" text="Report">
+                 <font>
+                     <Font name="Roboto Thin" size="30.0" />
+                 </font>
+            </Label>
+            <TextArea fx:id="textArea" editable="false" layoutX="13.0" layoutY="66.0" prefHeight="475.0" prefWidth="375.0" />
+             <Button layoutX="180.0" layoutY="561.0" mnemonicParsing="false" onAction="#button" text="Back" />
+         </children></Pane>
+   </children>
+</AnchorPane>

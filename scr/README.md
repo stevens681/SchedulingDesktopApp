@@ -1,2 +1,0 @@
-# SchedulingDesktopApp
-DesktopApp

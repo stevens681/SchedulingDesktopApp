@@ -179,6 +179,7 @@ public class AppointmentForm {
             }
         }
 
+        time.setPromptText("Pick a time");
         time.getItems().addAll(timeToSet);
     }
 
@@ -269,6 +270,7 @@ public class AppointmentForm {
         return dateTime;
     }
 
+
     /**
      * Checks for empty text fields and logical error
      * @return If everything is good
@@ -326,6 +328,7 @@ public class AppointmentForm {
     @FXML
     public void initialize() {
 
+        time.setPromptText("Please select a date");
         daysAvailable();
         fillType();
     }
