@@ -40,7 +40,7 @@ Modifying an existing customer, the application prepopulate the customer's info.
 
 ![img_3.png](img_3.png)
 
-Add/View Appointment allows you to view the customer's appointments, add a new one, modify an existing one, 
+Scheduling Appointments allows you to view the customer's appointments, add a new one, modify an existing one, 
 see the details of the appointment, or delete appointments.
 
 ![img_4.png](img_4.png)
@@ -60,3 +60,7 @@ Appointment's details
 Report
 
 ![img_8.png](img_8.png)
+
+A3f
+When I was working with the Database I found an error that did not allow me to delete one of my entries from the 
+database, it was telling me that I was using a foring key. Now I think the error went away, I just noticed it just in case.

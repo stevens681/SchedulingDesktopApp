@@ -22,6 +22,7 @@
             <RadioButton fx:id="radioUSA" layoutX="343.0" layoutY="66.0" mnemonicParsing="false" onAction="#radioButtons" text="USA" />
             <RadioButton fx:id="radioCA" layoutX="395.0" layoutY="66.0" mnemonicParsing="false" onAction="#radioButtons" text="CA" />
             <RadioButton fx:id="radioUK" layoutX="448.0" layoutY="66.0" mnemonicParsing="false" onAction="#radioButtons" text="UK" />
+            <Button layoutX="247.0" layoutY="546.0" mnemonicParsing="false" onAction="#button" text="Week and Month" />
          </children>
       </Pane>
    </children>

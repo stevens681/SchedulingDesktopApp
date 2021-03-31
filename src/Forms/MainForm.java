@@ -1,5 +1,6 @@
 package Forms;
 
+import Utilities.Appointment;
 import Utilities.Connect;
 import Utilities.Customer;
 import Utilities.DataBase;
@@ -16,11 +17,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import javax.swing.*;
+import javax.swing.text.html.StyleSheet;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
@@ -43,7 +48,10 @@ public class MainForm {
 
     /**
      * The handler of the buttons
+     * The Lambda expression in this allowed me to reduce the code
+     * and make the code simpler to read
      * @param e ActionEvent
+     *
      * */
     @FXML
     public void button(ActionEvent e)throws IOException {
@@ -53,11 +61,14 @@ public class MainForm {
             case "View/Add Appointment" -> Main.callForms(e, "Records");
             case "Delete Customer" -> deleteCustomer(e);
             case "Report" -> Main.callForms(e, "Report");
+            case "Week and Month" -> weekMonthText();
         }
     }
 
     /**
      * Pull the states from the database
+     * The Lambda expression in this allowed me to reduce the code
+     * and make the code simpler to read
      * */
     public static void fillStatesID(){
 
@@ -242,6 +253,54 @@ public class MainForm {
             custTable.setItems(DataBase.getAllCustomers());
         }
     }
+
+    /**
+     * Shows a dialog box with upcoming appointments
+     * */
+    public void weekMonthText(){
+
+        LocalDate today = LocalDate.parse(Main.splitDate(Main.time(), 0));
+        String week = "This week Appointments", month = "This month Appointments", text = "";
+
+
+        for(Customer customer: DataBase.getAllCustomers()) {
+            for (Appointment appointment: customer.getAllAppointments()) {
+
+                LocalDate apt = LocalDate.parse(Main.splitDate(appointment.getStart(), 0));
+                Period p = Period.between(today, apt);
+
+                if(p.getDays() <= 7 && p.getDays() >= 0){
+                    week += "\nAppointment ID: " + appointment.getAptId() + "\n";
+                    week += "Appointment Tittle: " + appointment.getTittle() + "\n";
+                    week += "Appointment Description: " + appointment.getDescription() + "\n";
+                    week += "Appointment Location: " + appointment.getLocation() + "\n";
+                    week += "Customer Name: " + customer.getName() + "\n";
+                    week += "Appointment Start: " + appointment.getStart() + "\n";
+                    week += "Appointment End: " + appointment.getEnd() + "\n";
+                    week += "Customer ID: " + customer.getId() + "\n\n";
+
+                }
+                else if(p.getDays() <= 30 && p.getDays() >= 8){
+                    month += "\nAppointment ID: " + appointment.getAptId() + "\n";
+                    month += "Appointment Tittle: " + appointment.getTittle() + "\n";
+                    month += "Appointment Description: " + appointment.getDescription() + "\n";
+                    month += "Appointment Location: " + appointment.getLocation() + "\n";
+                    month += "Customer Name: " + customer.getName() + "\n";
+                    month += "Appointment Start: " + appointment.getStart() + "\n";
+                    month += "Appointment End: " + appointment.getEnd() + "\n";
+                    month += "Customer ID: " + customer.getId() + "\n\n";
+
+                }
+                else{
+                    text += week + " We do not have appointment this week\n" +
+                        month + " We do not have appointment this month";
+                }
+
+            }
+        }
+        showMessageDialog(null,week + month);
+    }
+
 
     /**
      * Initializes the form.

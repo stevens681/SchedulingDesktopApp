@@ -87,6 +87,8 @@ public class DataBase {
 
     /**
      * Pull the states from the database
+     * The Lambda expression in this allowed me to reduce the code
+     * and make the code simpler to read
      * */
     public static void fillStates(){
 
