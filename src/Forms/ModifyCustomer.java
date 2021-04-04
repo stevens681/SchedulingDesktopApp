@@ -1,5 +1,6 @@
 package Forms;
 
+import Utilities.Connect;
 import Utilities.Customer;
 import Utilities.DataBase;
 import javafx.event.ActionEvent;
@@ -41,6 +42,8 @@ public class ModifyCustomer {
 
     /**
      * This will fill the customer fields
+     * The Lambda expression in this allowed me to reduce lines of the code
+     * and makes the code simpler to read
      * @param customer The selected customer
      * */
     public void selectedCustomer(Customer customer) {
@@ -66,11 +69,12 @@ public class ModifyCustomer {
 
     /**
      * Will fill the state ComboBox
+     * The Lambda expression in this allowed me to reduce lines of the code
+     * and makes the code simpler to read
      * */
-    public void setStateCombo(ActionEvent e) {
+    public void setStateCombo() {
 
         String country = countryCombo.getValue().toString();
-        stateCombo.getItems().clear();
 
         switch (country){
             case "Canada" -> stateCombo.getItems().addAll(DataBase.getCanada());
@@ -78,7 +82,6 @@ public class ModifyCustomer {
             case "United States" -> stateCombo.getItems().addAll(DataBase.getUsa());
         }
 
-        stateCombo.getSelectionModel().select(0);
     }
 
 
@@ -135,9 +138,8 @@ public class ModifyCustomer {
             checked = false;
             msg += "The zip field is empty\n";
         }
-        lbl.setText(DataBase.getUser().toUpperCase()+" Please check\n"+msg);
 
-        System.out.println(msg);
+        lbl.setText(DataBase.getUser().toUpperCase()+" Please check\n"+msg);
 
         return checked;
 
@@ -149,6 +151,18 @@ public class ModifyCustomer {
      * @throws IOException Failed to go back to the main form
      **/
     public void cancel(ActionEvent e)throws IOException {
+
         Main.callForms(e, "MainForm");
+    }
+
+    /**
+     * Initializes the form
+     * */
+    public void initialize(){
+        lbl.setText(DataBase.getUser().toUpperCase());
+        countryCombo.getItems().addAll(DataBase.getAllCountries());
+        countryCombo.getSelectionModel().select(Connect.getCountry());
+        setStateCombo();
+        custID.setText("Customer ID:\n"+id);
     }
 }

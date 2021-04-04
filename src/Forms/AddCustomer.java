@@ -39,6 +39,8 @@ public class AddCustomer {
 
     /**
      * Will fill the state ComboBox
+     * The Lambda expression in this allowed me to reduce lines of the code
+     * and makes the code simpler to read.
      * */
     public void setStateCombo(){
 

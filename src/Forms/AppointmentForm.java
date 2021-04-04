@@ -34,7 +34,7 @@ public class AppointmentForm {
     @FXML
     private ComboBox typeOfApp;
     @FXML
-    private TextField contactName;
+    private ComboBox contactName;
     @FXML
     private TextField tittle;
     @FXML
@@ -55,17 +55,17 @@ public class AppointmentForm {
     /**
      * This will fill the customer fields in this class
      * */
-    public void customer(Customer customer){
-        contactName.setText(customer.getName());
-        name = customer.getName();
-        phone = customer.getPhone();
-        address = customer.getAddress();
-        zipCode = customer.getZipCode();
-        city = customer.getCity();
-        id = customer.getId();
-        this.addNewAppointment = customer.getAllAppointments();
-
-    }
+//    public void customer(Customer customer){
+//        contactName.setText(customer.getName());
+//        name = customer.getName();
+//        phone = customer.getPhone();
+//        address = customer.getAddress();
+//        zipCode = customer.getZipCode();
+//        city = customer.getCity();
+//        id = customer.getId();
+//        this.addNewAppointment = customer.getAllAppointments();
+//
+//    }
 
     /**
      * The cancel button takes you back to the main form
@@ -90,6 +90,9 @@ public class AppointmentForm {
 
     /**
      * The save button add an appointment to a customer
+     * The Lambda expression in this allowed me to reduce lines of the code
+     * and makes the code simpler to read, I need it a better way to assign the
+     * time that is another reason a used Lambda.
      * @param e ActionEvent
      * @throws IOException Failed to save the appointment
      * */
@@ -105,6 +108,8 @@ public class AppointmentForm {
                     type = typeOfApp.getValue().toString(), end="";
             int contactId = DataBase.getAllContacts().size()+1;
 
+            System.out.println("Contact Id:" + contactId);
+            System.out.println("Customer Id:" + contactId);
             switch (hour){
                 case "08:00:00" -> end = "08:45:00";
                 case "09:00:00" -> end = "09:45:00";
@@ -113,7 +118,7 @@ public class AppointmentForm {
                 case "12:00:00" -> end = "12:45:00";
             }
 
-            contact = new Contact(contactId, contactName.getText(), mail);
+            contact = new Contact(contactId, contactName.getValue().toString(), mail);
 
             newContact.add(contact);
 
@@ -130,7 +135,7 @@ public class AppointmentForm {
 
             DataBase.updateCustomer(id, upCustomer, true);
 
-            showMessageDialog(null, "Customer: " + contactName.getText()
+            showMessageDialog(null, "Customer: " + contactName.getValue().toString()
                                 +"\nDate: " + date);
 
             Main.callForms(e, "MainForm");
@@ -189,7 +194,7 @@ public class AppointmentForm {
      * then it will mark off in red all the days
      * that have passed, and mark off in gray if
      * there is not anymore appointment place
-     *for the day
+     * for the day
      * */
     private void daysAvailable(){
 
@@ -316,6 +321,23 @@ public class AppointmentForm {
                 msg += "Please check your email\n";
             }
         }
+        if(contactName.getValue() == ""){
+            msg += "Please select a contact\n";
+        }
+        else {
+            for (Customer c: DataBase.getAllCustomers()){
+                if(contactName.getValue().equals(c.getName())){
+                    id = c.getId();
+                    name = c.getName();
+                    phone = c.getPhone();
+                    address = c.getAddress();
+                    zipCode = c.getZipCode();
+                    city = c.getCity();
+                    id = c.getId();
+                    this.addNewAppointment = c.getAllAppointments();
+                }
+            }
+        }
 
         lbl.setText(DataBase.getUser().toUpperCase()+" Please check:\n"+msg);
 
@@ -327,6 +349,15 @@ public class AppointmentForm {
      * */
     @FXML
     public void initialize() {
+        ArrayList<String> contactNameList = new ArrayList<String>();
+
+        for(Customer customer: DataBase.getAllCustomers()){
+            contactNameList.add(customer.getName());
+
+        }
+        contactName.getItems().addAll(contactNameList);
+
+        lbl.setText("ID: " + appId);
 
         time.setPromptText("Please select a date");
         daysAvailable();

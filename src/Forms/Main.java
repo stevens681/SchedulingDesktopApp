@@ -75,7 +75,6 @@ public class Main extends Application {
     public static void log(String logData){
         try {
 
-
             File logTxt = new File("login_activity.txt");
             if(!logTxt.exists()){
                 logTxt.createNewFile();
@@ -216,6 +215,9 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Splits dates
+     * */
     public static String splitDate(String appointment, int index){
         String[] date = appointment.split(" ");
         return date[index];

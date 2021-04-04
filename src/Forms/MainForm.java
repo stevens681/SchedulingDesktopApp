@@ -1,9 +1,6 @@
 package Forms;
 
-import Utilities.Appointment;
-import Utilities.Connect;
-import Utilities.Customer;
-import Utilities.DataBase;
+import Utilities.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,7 +14,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import javax.swing.*;
-import javax.swing.text.html.StyleSheet;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,7 +21,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.format.DateTimeFormatter;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
@@ -57,11 +52,19 @@ public class MainForm {
     public void button(ActionEvent e)throws IOException {
         switch (((Button) e.getSource()).getText()) {
             case "Add a New Customer" -> Main.callForms(e, "addCustomer");
-            case "Scheduling" -> modCustomer(e);
+            case "Modify Customer" -> modCustomer(e);
             case "View/Add Appointment" -> Main.callForms(e, "Records");
             case "Delete Customer" -> deleteCustomer(e);
             case "Report" -> Main.callForms(e, "Report");
             case "Week and Month" -> weekMonthText();
+            case "Add Appointment" -> {
+                if(DataBase.getAllCustomers().isEmpty()){
+                    showMessageDialog(null, "Please add a customer first!");
+                }
+                else {
+                    Main.callForms(e, "AppointmentForm");
+                }
+            }
         }
     }
 
@@ -92,6 +95,7 @@ public class MainForm {
             System.out.println("SQLException: " + e.getMessage());
         }
     }
+
     /**
      * This delete a selected customer
      * Updates the table view
@@ -114,7 +118,7 @@ public class MainForm {
                     data.close();
 
                 }catch (SQLException a) {
-                    showMessageDialog(null,"SQLException: " + a.getMessage());
+                    System.out.println("SQLException: " + a.getMessage());
 
                 }
                 DataBase.deleteCustomer(customer);
@@ -212,6 +216,10 @@ public class MainForm {
 
         }
     }
+
+    /**
+     * This sort the customers by countries
+     * */
     public void radioButtons(ActionEvent e){
 
         ObservableList<Customer> byContries = FXCollections.observableArrayList();
@@ -308,10 +316,10 @@ public class MainForm {
     @FXML
     public void initialize(){
 
-        user.setText(DataBase.getUser().toUpperCase() + " "+ Connect.getCountry());
-        colCreator("customer");
         DataBase.pullCountries();
         fillStatesID();
+        user.setText(DataBase.getUser().toUpperCase() + " "+ Connect.getCountry());
+        colCreator("customer");
 
     }
 }

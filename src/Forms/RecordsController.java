@@ -43,6 +43,8 @@ public class RecordsController {
 
     /**
      * This will fill the fields for the customers
+     * The Lambda expression in this allowed me to reduce lines of the code
+     * and makes the code simpler to read
      * @param customer
      * */
     public void selectedCustomer(Customer customer){
@@ -71,6 +73,8 @@ public class RecordsController {
 
     /**
      * This will read the button and do the action
+     * The Lambda expression in this allowed me to reduce lines of the code
+     * and makes the code simpler to read, also calls the right form
      * @param e ActionEvent
      * @throws IOException failed to do the action
      * */
@@ -78,7 +82,7 @@ public class RecordsController {
     public void button(ActionEvent e)throws IOException {
 
         switch (((Button) e.getSource()).getText()) {
-            case "Add Appointment" -> apptButton(e);
+            //case "Add Appointment" -> apptButton(e);
             case "Details" -> detail(e);
             case "Back" -> Main.callForms(e, "MainForm");
             case "Delete Appointment" -> deleteAppointment(e);
@@ -138,21 +142,21 @@ public class RecordsController {
      * @param e ActionEvent
      * @throws IOException failed to do the action
      * */
-    @FXML
-    public void apptButton(ActionEvent e) throws IOException {
-
-        Parent parent;
-        Stage stage;
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentForm.fxml"));
-        loader.load();
-        AppointmentForm selected = loader.getController();
-        selected.customer(selectedCustomer);
-        parent = loader.getRoot();
-        stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(parent));
-        stage.show();
-    }
+//    @FXML
+//    public void apptButton(ActionEvent e) throws IOException {
+//
+//        Parent parent;
+//        Stage stage;
+//
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentForm.fxml"));
+//        loader.load();
+//        AppointmentForm selected = loader.getController();
+//        selected.customer(selectedCustomer);
+//        parent = loader.getRoot();
+//        stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+//        stage.setScene(new Scene(parent));
+//        stage.show();
+//    }
 
     /**
      * Opens the modify appointment form

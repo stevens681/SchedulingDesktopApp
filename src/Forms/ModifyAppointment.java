@@ -113,6 +113,8 @@ public class ModifyAppointment {
 
     /**
      * The save button add an appointment to a customer
+     * The Lambda expression in this allowed me to reduce lines of the code
+     * and makes the code simpler to read
      * @param e ActionEvent
      * @throws IOException Failed to save the appointment
      * */

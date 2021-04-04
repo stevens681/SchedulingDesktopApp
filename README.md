@@ -14,6 +14,8 @@ Build #IC-203.7148.57, built on January 25, 2021
 Runtime version: 11.0.9.1+11-b1145.77 amd64
 VM: OpenJDK 64-Bit Server VM by JetBrains s.r.o.
 
+
+
 To use the application you will need to login
 
 Username: test
@@ -62,5 +64,8 @@ Report
 ![img_8.png](img_8.png)
 
 A3f
+
+MySQL Connector driver version: mysql-connector-java-8.0.19
+
 When I was working with the Database I found an error that did not allow me to delete one of my entries from the 
 database, it was telling me that I was using a foring key. Now I think the error went away, I just noticed it just in case.

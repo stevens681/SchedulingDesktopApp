@@ -41,7 +41,7 @@ public class LoginController {
 
     /**
      * The login checks for the username and password to be correct.
-     * @param e Action evernt
+     * @param e Action event
      * @throws IOException Failed to login
      * */
     @FXML
@@ -118,6 +118,8 @@ public class LoginController {
 
     /**
      * Gets the location and the computer language.
+     * The Lambda expression in this allowed me to reduce lines of the code
+     * and makes the code simpler to read
      * */
     public void location(){
 

@@ -1,6 +1,5 @@
 package Utilities;
 
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.sql.PreparedStatement;
@@ -23,7 +22,6 @@ public class DataBase {
     private static final ObservableList<String> usa = FXCollections.observableArrayList();
     private static final ObservableList<String> allCountries = FXCollections.observableArrayList();
     private static String user;
-
 
     /**
      * Checks for the username and the password in the database
@@ -57,6 +55,28 @@ public class DataBase {
             System.out.println("SQLException: " + e.getMessage());
         }
         return ok;
+    }
+
+    /**
+     * Add a user to the database
+     * @param username The user
+     * @param password The password
+     * */
+    public static void addUser(String username, String password){
+        try{
+            Statement data = Connect.sendData().createStatement();
+
+            String query = "INSERT INTO users (User_Name, User_ID, Create_Date, Password)";
+
+
+            String values = " VALUES ('" + username + "', '" +1+ "', '" + java.time.LocalDate.now() + "', '" + password + "')";
+            PreparedStatement statement = Connect.sendData().prepareStatement(query+values);
+            statement.executeUpdate();
+            data.close();
+        }catch (SQLException e){
+            System.out.println("Adding the customer SQLException: " + e.getMessage());
+        }
+
     }
 
     /**
@@ -342,7 +362,7 @@ public class DataBase {
             data.close();
 
         } catch (SQLException e) {
-            showMessageDialog(null,"SQLException: " + e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
         }
     }
 
@@ -363,7 +383,6 @@ public class DataBase {
         for(Customer c : allCustomers){
             if(newCustomer.getName().equalsIgnoreCase(c.getName())){
                 exist =false;
-
             }
         }
 
@@ -380,18 +399,13 @@ public class DataBase {
                         java.time.LocalDate.now() + "', '" + user + "', '" + name + "', '" +
                         getSearchID(state, "first_level_divisions", "Division", "Division_ID")+"', '"+
                         phone + "', '" + zip + "')";
-
                 PreparedStatement statement = Connect.sendData().prepareStatement(query+values);
                 statement.executeUpdate();
-
                 data.close();
-
             }catch (SQLException e){
-                showMessageDialog(null,"Adding the customer SQLException: " + e.getMessage());
+                System.out.println("Adding the customer SQLException: " + e.getMessage());
             }
-
             allCustomers.add(newCustomer);
-
         }
         else
             showMessageDialog(null, "This customer already exists!");
@@ -426,7 +440,7 @@ public class DataBase {
                 data.close();
 
             }catch (SQLException e){
-                showMessageDialog(null,"Adding the customer SQLException: " + e.getMessage());
+                System.out.println("Adding the customer SQLException: " + e.getMessage());
             }
         }
         getAllCustomers().set(index -1, selectedCustomer);
@@ -458,7 +472,7 @@ public class DataBase {
             data.close();
 
         }catch (SQLException e){
-            showMessageDialog(null,"Adding the customer SQLException: " + e.getMessage());
+            System.out.println("Adding the customer SQLException: " + e.getMessage());
         }
 
         try{
@@ -475,7 +489,7 @@ public class DataBase {
             data.close();
 
         }catch (SQLException e){
-            showMessageDialog(null,"Adding the customer SQLException: " + e.getMessage());
+            System.out.println("Adding the customer SQLException: " + e.getMessage());
         }
 
         getAllContacts().set(contactIndex-1, selectedContact);
@@ -500,7 +514,7 @@ public class DataBase {
         boolean exist = true;
 
         for(Appointment appointment : allAppointments){
-            if(newAppointment.getAptId() == appointment.getAptId()){
+            if(id == appointment.getAptId()){
                 exist =false;
 
             }
@@ -526,7 +540,7 @@ public class DataBase {
                 data.close();
 
             }catch (SQLException e){
-                showMessageDialog(null,"Adding the appointment SQLException: " + e.getMessage());
+                System.out.println("Adding the appointment SQLException: " + e.getMessage());
             }
             allAppointments.add(newAppointment);
 
@@ -550,7 +564,6 @@ public class DataBase {
         for(Contact c : allContacts){
             if(newContact.getEmail().equalsIgnoreCase(c.getEmail())){
                 exist =false;
-
             }
         }
 
@@ -570,12 +583,11 @@ public class DataBase {
                 data.close();
 
             }catch (SQLException e){
-                showMessageDialog(null,"Adding the contact SQLException: " + e.getMessage());
+                System.out.println("Adding the contact SQLException: " + e.getMessage());
             }
             allContacts.add(newContact);
         }
     }
-
 
     public static ObservableList<Customer>getAllCustomers(){return allCustomers;}
     public static ObservableList<Contact>getAllContacts(){return allContacts;}
