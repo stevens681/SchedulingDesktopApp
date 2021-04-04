@@ -18,11 +18,12 @@
                      <Font name="Roboto Thin" size="30.0" />
                  </font></Label>
             <Label fx:id="user" layoutX="26.0" layoutY="558.0" />
-            <Button layoutX="496.0" layoutY="546.0" mnemonicParsing="false" onAction="#button" text="Report" />
+            <Button layoutX="440.0" layoutY="546.0" mnemonicParsing="false" onAction="#button" text="Report" />
             <RadioButton fx:id="radioUSA" layoutX="343.0" layoutY="66.0" mnemonicParsing="false" onAction="#radioButtons" text="USA" />
             <RadioButton fx:id="radioCA" layoutX="395.0" layoutY="66.0" mnemonicParsing="false" onAction="#radioButtons" text="CA" />
             <RadioButton fx:id="radioUK" layoutX="448.0" layoutY="66.0" mnemonicParsing="false" onAction="#radioButtons" text="UK" />
-            <Button layoutX="247.0" layoutY="546.0" mnemonicParsing="false" onAction="#button" text="Week and Month" />
+            <Button layoutX="193.0" layoutY="546.0" mnemonicParsing="false" onAction="#button" text="Week and Month" />
+            <Button layoutX="312.0" layoutY="546.0" mnemonicParsing="false" onAction="#button" text="Add Appointment" />
          </children>
       </Pane>
    </children>
