@@ -82,7 +82,7 @@ public class MainForm {
 
             while(results.next()) {
 
-                String state = results.getString("Division_ID");
+                String state = results.getString("Division");
                 switch (results.getInt("COUNTRY_ID")) {
                     case 38 -> canadaID.add(state);
                     case 230 -> ukID.add(state);
@@ -138,18 +138,18 @@ public class MainForm {
      * */
     public void colCreator(String tbls) {
 
-        String[] lblCustomer = {"ID", "Customer Name"};
-        String[] areas = {"id", "name"};
+        String[] lblCustomer = {"ID", "Customer Name", "City"};
+        String[] areas = {"id", "name", "city"};
         int colWidth;
 
         if (tbls.equalsIgnoreCase("customer")) {
             custTable.setItems(DataBase.getAllCustomers());
 
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 3; i++) {
                 if (lblCustomer[i].equals("ID"))
                     colWidth = 50;
                 else
-                    colWidth = 450;
+                    colWidth = 225;
 
 
                 TableColumn column = new TableColumn(lblCustomer[i]);

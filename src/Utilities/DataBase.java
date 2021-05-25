@@ -288,6 +288,8 @@ public class DataBase {
      * Pull the customers from the database
      * */
     public static void pullCustomers(){
+
+        String table = "first_level_divisions", columnFrom= "Division_ID", columnResult ="Division";
         try {
             Statement data = Connect.sendData().createStatement();
             String query = "SELECT * FROM customers";
@@ -295,7 +297,8 @@ public class DataBase {
             while(results.next()) {
                 Customer customer = new Customer(results.getInt("Customer_ID"),
                         results.getString("Customer_Name"), results.getString("Address"),
-                        results.getString("Postal_Code"), results.getString("Division_ID"),
+                        results.getString("Postal_Code"), getSearchName(results.getString("Division_ID"),
+                        table, columnFrom, columnResult),
                         results.getString("Phone"));
                 allCustomers.add(customer);
             }
@@ -372,10 +375,13 @@ public class DataBase {
      * */
     public static void addCustomer(Customer newCustomer){
 
+        String table = "first_level_divisions", columnFrom= "Division_ID", columnResult ="Division";
         String name = newCustomer.getName(), address = newCustomer.getAddress(),
                 phone = newCustomer.getPhone(), zip = newCustomer.getZipCode(),
-                state = newCustomer.getCity(), user = DataBase.getUser();
+                state = getSearchName(newCustomer.getCity(), table, columnFrom, columnResult),
+                user = DataBase.getUser();
 
+        System.out.println(state);
         int id=newCustomer.getId();
 
         boolean exist = true;
@@ -419,9 +425,10 @@ public class DataBase {
      * */
     public static void updateCustomer(int index, Customer selectedCustomer, boolean isAppointment){
 
+        String table = "first_level_divisions", columnFrom= "Division_ID", columnResult ="Division";
         String name = selectedCustomer.getName(), address = selectedCustomer.getAddress(),
                 phone = selectedCustomer.getPhone(), zip = selectedCustomer.getZipCode(),
-                state = selectedCustomer.getCity(), user = DataBase.getUser();
+                state = getSearchName(selectedCustomer.getCity(), table, columnFrom, columnResult), user = DataBase.getUser();
 
         int id=selectedCustomer.getId();
 

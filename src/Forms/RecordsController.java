@@ -49,7 +49,7 @@ public class RecordsController {
      * */
     public void selectedCustomer(Customer customer){
 
-        String table = "first_level_divisions", columnFrom= "Division_ID", columnResult ="Division";
+//        String table = "first_level_divisions", columnFrom= "Division_ID", columnResult ="Division";
         int countryId = DataBase.idToId(customer.getCity(), "first_level_divisions",
                 "Division_ID","COUNTRY_ID");
         String country = "";
@@ -65,7 +65,7 @@ public class RecordsController {
         custTable.setItems(appointmentList);
         selectedCustomer = customer;
         addressLabel.setText(country + ", " + customer.getAddress() + ", " +
-                DataBase.getSearchName(customer.getCity(), table, columnFrom, columnResult)+"\nTel: "+
+                customer.getCity() +"\nTel: "+
                 number);
         nameLabel.setText(customer.getName() );
 

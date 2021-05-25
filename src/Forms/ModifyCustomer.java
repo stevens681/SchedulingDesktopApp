@@ -48,7 +48,8 @@ public class ModifyCustomer {
      * */
     public void selectedCustomer(Customer customer) {
         String table = "first_level_divisions", columnFrom= "Division_ID", columnResult ="Division";
-        int countryId = DataBase.idToId(customer.getCity(), "first_level_divisions", "Division_ID","COUNTRY_ID");
+        int countryId = DataBase.idToId(String.valueOf(DataBase.getSearchID(customer.getCity(), table, columnResult, columnFrom))
+                , "first_level_divisions", "Division_ID","COUNTRY_ID");
         String country = "";
 
         switch (countryId) {
@@ -63,7 +64,7 @@ public class ModifyCustomer {
         custPhoneTxt.setText(customer.getPhone());
         custZipTxt.setText(customer.getZipCode());
         countryCombo.getSelectionModel().select(country);
-        stateCombo.getSelectionModel().select(DataBase.getSearchName(customer.getCity(), table, columnFrom, columnResult));
+        stateCombo.getSelectionModel().select(customer.getCity());
 
     }
 
