@@ -134,15 +134,15 @@ public class MainForm {
 
     /**
      * This will create the tableview and populate the cells
-     * @param  tbls the name of the table
+     * @param  tables the name of the table
      * */
-    public void colCreator(String tbls) {
+    public void colCreator(String tables) {
 
         String[] lblCustomer = {"ID", "Customer Name", "City"};
         String[] areas = {"id", "name", "city"};
         int colWidth;
 
-        if (tbls.equalsIgnoreCase("customer")) {
+        if (tables.equalsIgnoreCase("customer")) {
             custTable.setItems(DataBase.getAllCustomers());
 
             for (int i = 0; i < 3; i++) {
@@ -222,16 +222,17 @@ public class MainForm {
      * */
     public void radioButtons(ActionEvent e){
 
-        ObservableList<Customer> byContries = FXCollections.observableArrayList();
+        ObservableList<Customer> byCountries = FXCollections.observableArrayList();
+        byCountries.clear();
+
 
         if(radioUSA.isSelected()){
             for(Customer customer: DataBase.getAllCustomers()){
                 for(String s: usaID){
                     if(customer.getCity().equals(s)){
-                        byContries.add(customer);
-                        custTable.setItems(byContries);
+                        byCountries.add(customer);
+                        custTable.setItems(byCountries);
                     }
-
                 }
             }
         }
@@ -239,23 +240,25 @@ public class MainForm {
             for(Customer customer: DataBase.getAllCustomers()){
                 for(String s: ukID) {
                     if (customer.getCity().equals(s)) {
-                        byContries.add(customer);
-                        custTable.setItems(byContries);
+                        byCountries.add(customer);
+                        custTable.setItems(byCountries);
                     }
 
                 }
             }
+
         }
         if(radioCA.isSelected()){
             for(Customer customer: DataBase.getAllCustomers()) {
                 for (String s: canadaID) {
                     if (customer.getCity().equals(s)) {
-                        byContries.add(customer);
-                        custTable.setItems(byContries);
+                        byCountries.add(customer);
+                        custTable.setItems(byCountries);
                     }
 
                 }
             }
+
         }
         if(!radioCA.isSelected() && !radioUK.isSelected() && !radioUSA.isSelected()){
             custTable.setItems(DataBase.getAllCustomers());
@@ -316,8 +319,10 @@ public class MainForm {
     @FXML
     public void initialize(){
 
-        DataBase.pullCountries();
-        fillStatesID();
+        if(DataBase.getAllCountries().isEmpty())
+            DataBase.pullCountries();
+        if(canadaID.isEmpty() || ukID.isEmpty() || usaID.isEmpty())
+            fillStatesID();
         user.setText(DataBase.getUser().toUpperCase() + " "+ Connect.getCountry());
         colCreator("customer");
 

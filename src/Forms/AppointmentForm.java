@@ -56,7 +56,7 @@ public class AppointmentForm {
      * This will fill the customer fields in this class
      * */
 //    public void customer(Customer customer){
-//        contactName.setText(customer.getName());
+//        contactName.getSelectionModel().select(customer.getName());
 //        name = customer.getName();
 //        phone = customer.getPhone();
 //        address = customer.getAddress();

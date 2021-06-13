@@ -65,8 +65,7 @@ public class RecordsController {
         custTable.setItems(appointmentList);
         selectedCustomer = customer;
         addressLabel.setText(country + ", " + customer.getAddress() + ", " +
-                customer.getCity() +"\nTel: "+
-                number);
+                customer.getCity() +"\nTel: "+ number);
         nameLabel.setText(customer.getName() );
 
     }

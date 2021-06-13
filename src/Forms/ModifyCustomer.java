@@ -65,6 +65,7 @@ public class ModifyCustomer {
         custZipTxt.setText(customer.getZipCode());
         countryCombo.getSelectionModel().select(country);
         stateCombo.getSelectionModel().select(customer.getCity());
+        setStateCombo();
 
     }
 
@@ -76,6 +77,7 @@ public class ModifyCustomer {
     public void setStateCombo() {
 
         String country = countryCombo.getValue().toString();
+        stateCombo.getItems().clear();
 
         switch (country){
             case "Canada" -> stateCombo.getItems().addAll(DataBase.getCanada());
@@ -84,7 +86,6 @@ public class ModifyCustomer {
         }
 
     }
-
 
     /**
      * This will make sure there is no empty fields
@@ -103,7 +104,6 @@ public class ModifyCustomer {
             DataBase.updateCustomer(id, customer, false);
             Main.callForms(e, "MainForm");
         }
-
     }
 
     /**
@@ -152,7 +152,6 @@ public class ModifyCustomer {
      * @throws IOException Failed to go back to the main form
      **/
     public void cancel(ActionEvent e)throws IOException {
-
         Main.callForms(e, "MainForm");
     }
 
