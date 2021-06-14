@@ -76,10 +76,10 @@ public class ModifyCustomer {
      * */
     public void setStateCombo() {
 
-        String country = countryCombo.getValue().toString();
+        String selectedCountry = countryCombo.getValue().toString();
         stateCombo.getItems().clear();
 
-        switch (country){
+        switch (selectedCountry){
             case "Canada" -> stateCombo.getItems().addAll(DataBase.getCanada());
             case "United Kingdom" -> stateCombo.getItems().addAll(DataBase.getUk());
             case "United States" -> stateCombo.getItems().addAll(DataBase.getUsa());
@@ -162,7 +162,6 @@ public class ModifyCustomer {
         lbl.setText(DataBase.getUser().toUpperCase());
         countryCombo.getItems().addAll(DataBase.getAllCountries());
         countryCombo.getSelectionModel().select(Connect.getCountry());
-        setStateCombo();
         custID.setText("Customer ID:\n"+id);
     }
 }

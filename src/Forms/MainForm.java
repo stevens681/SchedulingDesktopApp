@@ -134,15 +134,15 @@ public class MainForm {
 
     /**
      * This will create the tableview and populate the cells
-     * @param  tables the name of the table
+     * @param  tbls the name of the table
      * */
-    public void colCreator(String tables) {
+    public void colCreator(String tbls) {
 
         String[] lblCustomer = {"ID", "Customer Name", "City"};
         String[] areas = {"id", "name", "city"};
         int colWidth;
 
-        if (tables.equalsIgnoreCase("customer")) {
+        if (tbls.equalsIgnoreCase("customer")) {
             custTable.setItems(DataBase.getAllCustomers());
 
             for (int i = 0; i < 3; i++) {
@@ -225,7 +225,6 @@ public class MainForm {
         ObservableList<Customer> byCountries = FXCollections.observableArrayList();
         byCountries.clear();
 
-
         if(radioUSA.isSelected()){
             for(Customer customer: DataBase.getAllCustomers()){
                 for(String s: usaID){
@@ -233,6 +232,7 @@ public class MainForm {
                         byCountries.add(customer);
                         custTable.setItems(byCountries);
                     }
+
                 }
             }
         }
@@ -246,7 +246,6 @@ public class MainForm {
 
                 }
             }
-
         }
         if(radioCA.isSelected()){
             for(Customer customer: DataBase.getAllCustomers()) {
@@ -258,7 +257,6 @@ public class MainForm {
 
                 }
             }
-
         }
         if(!radioCA.isSelected() && !radioUK.isSelected() && !radioUSA.isSelected()){
             custTable.setItems(DataBase.getAllCustomers());

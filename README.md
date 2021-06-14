@@ -29,8 +29,7 @@ On this screen you can select a language also it takes the language of your syst
 After logged in at the screen you can add costumers, modify the selected customer, add an appointment to the selected customer,
 or delete a customer(to delete the customer all the appointments belonging to the customer need to be deleted first).
 
-
-![img_9.png](img_9.png)
+![img_10.png](img_10.png)
 
 
 Adding a new customer all the information need to be added properly then click "Add Customer".
@@ -63,9 +62,134 @@ Report
 
 ![img_8.png](img_8.png)
 
+*************************************************************************************************************
+                                    More Functionalities
+This function checks for every appointment every minute and if there is an appointment for today it will 
+display all the appointments for the day, also y there is an appointment coming up in the next 15 minutes 
+it also will show the appointment.
+
+`public static void alarm() {
+`
+
+        String msg ="There are appointments today at: ";
+        for (Appointment a:  DataBase.getAllAppointments()){
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+
+            try {
+                Date date, nowDate;
+
+                date = dateFormat.parse(convertZone(a.getStart()+" UTC"));
+                Calendar c = Calendar.getInstance();
+                c.setTime(date);
+                c.add(Calendar.MINUTE, -15);
+                int hour = c.get(Calendar.HOUR_OF_DAY), min = c.get(Calendar.MINUTE);
+
+                nowDate = dateFormat.parse(convertZone(time()));
+                c.setTime(nowDate);
+                int nowHour = c.get(Calendar.HOUR_OF_DAY), nowMin = c.get(Calendar.MINUTE);
+
+                if(splitDate(convertZone(time()), 0).equals(splitDate(convertZone(a.getStart()+" UTC"), 0))){
+                    todayAppointments = true;
+                    msg += "\n" +hour ;
+
+                    if(hour == nowHour && nowMin >= min){
+                        String aptMsg = "Tittle: " + a.getTittle() + "\nAt: "+ convertZone(a.getStart()+" UTC");
+                        Object[] options = {"Remind me in a minute",
+                                "Dismiss"};
+                        int n = JOptionPane.showOptionDialog(null,
+                                aptMsg, "Alarm", JOptionPane.YES_NO_OPTION,
+                                JOptionPane.WARNING_MESSAGE,null, options, options[1]);
+
+                        if(n == 1)
+                            alarmFlag = false;
+                    }
+                }
+
+            }
+            catch (ParseException parseException){
+                System.out.println(parseException);
+
+            }
+
+            if(todayAppointments){
+                Object[] options = {"Remind me in a minute",
+                        "Dismiss"};
+                int n = JOptionPane.showOptionDialog(null,
+                        msg, "Alarm", JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE,null, options, options[1]);
+
+                if(n == 1)
+                    todayAppointments = false;
+            }
+        }
+    }`
+
+This function will check for the calendar, it will mark red weekends and past days, also it will check 
+if there is another appointment for that day and if there is one it will remove it from the time picker, 
+if all the available times are already taken that day will be blocked.
+
+`private void daysAvailable(){`
+
+        String[] data = {};
+
+        ObservableList<String> inData = FXCollections.observableArrayList();
+
+        for(Appointment appointment: DataBase.getAllAppointments()){
+            if(appointment.getStart().contains(" "))
+                inData.add(splitDate(appointment.getStart()));
+            else
+                inData.add(appointment.getStart());
+        }
+
+        Map<String, Integer> result = new HashMap<>();
+        for(String s : inData){
+
+            if(result.containsKey(s)){
+
+                result.put(s, result.get(s)+1);
+                if(result.containsValue(5)){
+                    data = addString(data.length, data, s);
+                }
+            }else{
+
+                result.put(s, 1);
+            }
+        }
+
+            String[] finalData = data;
+
+            startDate.setDayCellFactory(days -> new DateCell() {
+
+            @FXML
+            public void updateItem(LocalDate date, boolean empty) {
+
+                super.updateItem(date, empty);
+                LocalDate todayNow = LocalDate.now();
+                setDisable(empty || date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY
+                        || date.compareTo(todayNow) < 0);
+                if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY ||
+                        date.compareTo(todayNow) < 0) {
+                    setStyle("-fx-background-color: #EF5350;");
+                }
+
+                for(int i = 0; i< finalData.length; i++){
+                    String test = finalData[i];
+                    DateTimeFormatter  formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate indate = LocalDate.parse(test, formatter);
+                    if(date.equals(indate)){
+                        setDisable(date.equals(indate));
+                        setStyle("-fx-background-color: #A6ACAF;");
+                    }
+                }
+            }
+        });
+    }
+*************************************************************************************************************
+
 A3f
 
-MySQL Connector driver version: mysql-connector-java-8.0.19
+MySQL Connecto driver version: mysql-connector-java-8.0.19
 
 When I was working with the Database I found an error that did not allow me to delete one of my entries from the 
 database, it was telling me that I was using a foring key. Now I think the error went away, I just noticed it just in case.

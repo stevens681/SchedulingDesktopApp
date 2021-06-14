@@ -108,8 +108,6 @@ public class AppointmentForm {
                     type = typeOfApp.getValue().toString(), end="";
             int contactId = DataBase.getAllContacts().size()+1;
 
-            System.out.println("Contact Id:" + contactId);
-            System.out.println("Customer Id:" + contactId);
             switch (hour){
                 case "08:00:00" -> end = "08:45:00";
                 case "09:00:00" -> end = "09:45:00";
@@ -353,11 +351,10 @@ public class AppointmentForm {
 
         for(Customer customer: DataBase.getAllCustomers()){
             contactNameList.add(customer.getName());
-
         }
         contactName.getItems().addAll(contactNameList);
 
-        lbl.setText("ID: " + appId);
+        lbl.setText("ID: " + appId +"\nUser: " + DataBase.getUser());
 
         time.setPromptText("Please select a date");
         daysAvailable();

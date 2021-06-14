@@ -356,6 +356,7 @@ public class ModifyAppointment {
     @FXML
     public void initialize() {
 
+        lbl.setText("ID: " + appId +"\nUser: " + DataBase.getUser());
         daysAvailable();
         fillType();
     }

@@ -39,7 +39,8 @@ public class DataBase {
             ResultSet results = data.executeQuery(q);
 
             while (results.next()){
-                if(results.getString("User_Name") != null && results.getString("User_Name").toLowerCase().equals(username)) {
+                if(results.getString("User_Name") != null && results.getString("User_Name").toLowerCase().
+                        equals(username)) {
 
                     String p = results.getString("Password");
                     if(p.equals(pass)) {
