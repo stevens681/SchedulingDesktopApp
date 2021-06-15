@@ -6,9 +6,32 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="Forms.OpeningForm"
-            prefHeight="400.0" prefWidth="600.0">
+            prefHeight="600.0" prefWidth="600.0">
+    <children>
+        <Pane prefHeight="600.0" prefWidth="600.0">
+            <children>
+                <TableView fx:id="custTable" layoutX="50.0" layoutY="86.0" prefHeight="400.0" prefWidth="500.0" />
+                <Button fx:id="cusReBtn" layoutX="429.0" layoutY="508.0" mnemonicParsing="false" text="Scheduling" />
+                <Button fx:id="addNewAp" layoutX="193.0" layoutY="508.0" mnemonicParsing="false" text="Modify Customer" />
+                <Button fx:id="addCustBtn" layoutX="50.0" layoutY="508.0" mnemonicParsing="false" text="Add a New Customer" />
+                <Button layoutX="312.0" layoutY="508.0" mnemonicParsing="false" text="Delete Customer" />
+                <Label fx:id="tittleLbl" layoutX="250.0" layoutY="24.0" text="Welcome">
+                    <font>
+                        <Font name="Roboto Thin" size="30.0" />
+                    </font></Label>
+                <Label fx:id="user" layoutX="26.0" layoutY="558.0" />
+                <Button layoutX="440.0" layoutY="546.0" mnemonicParsing="false" text="Report" />
+                <RadioButton fx:id="radioUSA" layoutX="343.0" layoutY="66.0" mnemonicParsing="false" text="USA" />
+                <RadioButton fx:id="radioCA" layoutX="395.0" layoutY="66.0" mnemonicParsing="false" text="CA" />
+                <RadioButton fx:id="radioUK" layoutX="448.0" layoutY="66.0" mnemonicParsing="false" text="UK" />
+                <Button layoutX="193.0" layoutY="546.0" mnemonicParsing="false" text="Week and Month" />
+                <Button layoutX="312.0" layoutY="546.0" mnemonicParsing="false" text="Add Appointment" />
+            </children>
+        </Pane>
+    </children>
 
 </AnchorPane>
