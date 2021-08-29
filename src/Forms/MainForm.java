@@ -55,7 +55,7 @@ public class MainForm {
             case "Modify Customer" -> modCustomer(e);
             case "View/Add Appointment" -> Main.callForms(e, "Records");
             case "Delete Customer" -> deleteCustomer(e);
-            case "Report" -> Main.callForms(e, "Report");
+            case "Report" -> Main.callForms(e, "OpeningForm");
             case "Week and Month" -> weekMonthText();
             case "Add Appointment" -> {
                 if(DataBase.getAllCustomers().isEmpty()){
@@ -268,7 +268,7 @@ public class MainForm {
      * */
     public void weekMonthText(){
 
-        LocalDate today = LocalDate.parse(Main.splitDate(Main.time(), 0));
+    LocalDate today = LocalDate.parse(Main.splitDate(Main.time(), 0));
         String week = "This week Appointments", month = "This month Appointments", text = "";
 
 
@@ -316,6 +316,8 @@ public class MainForm {
      * */
     @FXML
     public void initialize(){
+
+
 
         if(DataBase.getAllCountries().isEmpty())
             DataBase.pullCountries();

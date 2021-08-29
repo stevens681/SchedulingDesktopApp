@@ -25,7 +25,7 @@ import java.util.Timer;
  * @author Fernando Rosa
  * */
 public class Main extends Application {
-    public static boolean alarmFlag = true, todayAppointments = false;;
+    public static boolean alarmFlag = true, todayAppointments = false;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -48,7 +48,7 @@ public class Main extends Application {
 
 
         switch (loadForm) {
-            case "Records", "MainForm" -> {
+            case "Records", "MainForm", "OpeningForm" -> {
                 w = 600;
                 h = 600;
             }
@@ -88,7 +88,7 @@ public class Main extends Application {
 
 
         } catch (IOException e) {
-            System.out.println("System error: " + e.toString());
+            System.out.println("System error: " + e);
 
         }
 

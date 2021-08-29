@@ -35,7 +35,7 @@ public class AddCustomer {
     @FXML
     private Label custID;
 
-    int id = DataBase.getAllCustomers().size()+1;
+    int id = findId();
 
     /**
      * Will fill the state ComboBox
@@ -54,6 +54,23 @@ public class AddCustomer {
         }
 
         stateCombo.getSelectionModel().select(0);
+    }
+
+    /**
+     * Finds the missing ID
+     * @return id
+     * */
+    public int findId(){
+
+        int id = 1;
+        for(Customer c: DataBase.getAllCustomers()){
+            if(id == c.getId()){
+                id++;
+            }else
+                return id;
+        }
+
+        return id;
     }
 
     /**

@@ -56,7 +56,6 @@ public class Report {
                 for (Contact contact: a.getAllContacts()){
                     textArea.appendText("Contact Email: " + contact.getEmail() + "\n");
                 }
-
             }
             textArea.appendText("\n");
         }

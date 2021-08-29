@@ -48,24 +48,25 @@ public class AppointmentForm {
     @FXML
     private Label lbl;
 
-    int appId = DataBase.getAllAppointments().size()+1;
+    int appId = findId();
     public int id;
     public String name, address, zipCode, city, phone;
 
     /**
-     * This will fill the customer fields in this class
+     * Finds the missing ID
+     * @return id
      * */
-//    public void customer(Customer customer){
-//        contactName.getSelectionModel().select(customer.getName());
-//        name = customer.getName();
-//        phone = customer.getPhone();
-//        address = customer.getAddress();
-//        zipCode = customer.getZipCode();
-//        city = customer.getCity();
-//        id = customer.getId();
-//        this.addNewAppointment = customer.getAllAppointments();
-//
-//    }
+    public int findId(){
+
+        int id = 1;
+        for(Appointment a: DataBase.getAllAppointments()){
+            if(id == a.getAptId()){
+                id++;
+            }else
+                return id;
+        } 
+        return id;
+    }
 
     /**
      * The cancel button takes you back to the main form

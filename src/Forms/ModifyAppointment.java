@@ -26,7 +26,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
  * */
 public class ModifyAppointment {
 
-    private ObservableList<Contact> newContact = FXCollections.observableArrayList();
+    private final ObservableList<Contact> newContact = FXCollections.observableArrayList();
     private ObservableList<Appointment> addNewAppointment = FXCollections.observableArrayList();
     private Appointment newAppt;
     @FXML
